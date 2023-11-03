@@ -16,13 +16,32 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Editor; 
+using Argon.Common.Assets;
+using Microsoft.Extensions.Logging;
+
+namespace Argon.Editor;
 
 /// <summary>
-/// Combines App.xaml and AppShell.xaml in one.
+/// 
 /// </summary>
-public partial class App : Application {
-	public App() {
-		InitializeComponent();
+public static class Editor {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	public static MauiApp CreateMauiApp() {
+		var root = Environment.GetCommandLineArgs()[1];
+		var assets = new AssetManager(root);
+
+		var builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp<App>()
+			.ConfigureFonts(fonts => {
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+			});
+
+		builder.Logging.AddDebug();
+		return builder.Build();
 	}
 }

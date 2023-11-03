@@ -16,13 +16,20 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Editor; 
+using System.Text.Json.Serialization;
 
-/// <summary>
-/// Combines App.xaml and AppShell.xaml in one.
-/// </summary>
-public partial class App : Application {
-	public App() {
-		InitializeComponent();
-	}
+namespace Argon.Common.Assets;
+
+public record Asset (string Id, string Kind) {
+	/// <summary>
+	/// The identifier of this <c>Asset</c>. Every <c>Asset</c> has a unique identifier.
+	/// </summary>
+	[JsonPropertyName("id")]
+	public string Id { get; init; } = !string.IsNullOrEmpty(Id) ? Id : throw new ArgumentException("Id must not be null or empty.");
+
+	/// <summary>
+	/// The kind of <c>Asset</c>.
+	/// </summary>
+	[JsonPropertyName("kind")]
+	public string Kind { get; init; } = !string.IsNullOrEmpty(Kind) ? Kind : throw new ArgumentException("Kind must not be null or empty.");
 }

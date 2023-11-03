@@ -1,47 +1,39 @@
-﻿/*
- *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
- * 
- *	This program is free software; you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation; either version 3 of the License, or
- *	(at your option) any later version.
- *
- *	This program is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+﻿using System.Collections.ObjectModel;
 
-using argon.common;
-using Microsoft.Extensions.Logging;
+namespace Argon.Editor; 
+public partial class MainPage : ContentPage {
+	ObservableCollection<string> maps = new ObservableCollection<string>();
+	ObservableCollection<string> assets = new ObservableCollection<string>();
 
-namespace argon.editor;
-
-public partial class MainPage : ContentPage
-{
-	private int count = 0;
-
-	private readonly ILogger Logger = ArgonLoggerFactory.GetLogger();
-
-	public MainPage()
-	{
+	public MainPage() {
 		InitializeComponent();
-		Logger.LogInformation("initializing MainPage");
-	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
+		maps.Add("Zolder");
+		maps.Add("Heusden");
+		maps.Add("Bolderberg");
+		maps.Add("Boekt");
+		maps.Add("Eversel");
+		maps.Add("Viversel");
+		maps.Add("Berkenbos");
+		maps.Add("Voort");
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+		mapList.ItemsSource = maps;
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
+		assets.Add("brood");
+		assets.Add("kaas");
+		assets.Add("eieren");
+		assets.Add("boter");
+		assets.Add("chocolade");
+		assets.Add("appel");
+		assets.Add("peer");
+		assets.Add("salami");
+		assets.Add("taart");
+		assets.Add("pasta");
+		assets.Add("pizza");
+		assets.Add("bloem");
+		assets.Add("suiker");
+		assets.Add("zout");
+
+		assetList.ItemsSource = assets;
 	}
 }

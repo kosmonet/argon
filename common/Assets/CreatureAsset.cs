@@ -16,13 +16,20 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Editor; 
+using System.Text.Json.Serialization;
 
-/// <summary>
-/// Combines App.xaml and AppShell.xaml in one.
-/// </summary>
-public partial class App : Application {
-	public App() {
-		InitializeComponent();
-	}
+namespace Argon.Common.Assets; 
+
+internal record CreatureAsset (string Id, string Kind, string Name, string Image) : Asset (Id, Kind) {
+	/// <summary>
+	/// The name of this <c>Asset</c> as it is used to describe it in the game.
+	/// </summary>
+	[JsonPropertyName("name")]
+	public string Name { get; init; } = !string.IsNullOrEmpty(Name) ? Name : throw new ArgumentException("Name must not be null or empty.");
+
+	/// <summary>
+	/// The path to the image file used for this <c>Asset</c> in the game.
+	/// </summary>
+	[JsonPropertyName("image")]
+	public string Image { get; init; } = !string.IsNullOrEmpty(Image) ? Image : throw new ArgumentException("Image must not be null or empty.");
 }

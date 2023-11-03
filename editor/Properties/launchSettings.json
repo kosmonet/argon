@@ -2,6 +2,8 @@
   "profiles": {
     "Windows Machine": {
       "commandName": "MsixPackage",
+      "commandLineArgs": "C:\\Users\\mdriesen\\Workspace\\aneirin",
+      "workingDirectory": "C:\\Users\\mdriesen\\Workspace\\argon",
       "nativeDebugging": false
     }
   }

@@ -16,13 +16,14 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Editor; 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 
-/// <summary>
-/// Combines App.xaml and AppShell.xaml in one.
-/// </summary>
-public partial class App : Application {
-	public App() {
-		InitializeComponent();
+namespace Argon.Common;
+public static class LogHelper {
+	private static readonly ILogger logger = new DebugLoggerProvider().CreateLogger("argon");
+
+	public static ILogger GetLogger() {
+		return logger;
 	}
 }
