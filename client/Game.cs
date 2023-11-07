@@ -10,7 +10,7 @@ namespace argon.client
         Vector2 ballPosition;
         float ballSpeed;
 
-        private GraphicsDeviceManager Graphics;
+        private readonly GraphicsDeviceManager Graphics;
         private SpriteBatch SpriteBatch;
 
         public Game()

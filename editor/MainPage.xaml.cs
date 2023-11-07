@@ -2,8 +2,8 @@
 
 namespace Argon.Editor; 
 public partial class MainPage : ContentPage {
-	ObservableCollection<string> maps = new ObservableCollection<string>();
-	ObservableCollection<string> assets = new ObservableCollection<string>();
+	readonly ObservableCollection<string> maps = new();
+	readonly ObservableCollection<string> assets = new();
 
 	public MainPage() {
 		InitializeComponent();

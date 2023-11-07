@@ -16,20 +16,16 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Text.Json.Serialization;
+namespace Argon.Common.Assets;
 
-namespace Argon.Common.Assets; 
+internal class MapLoader : IAssetLoader {
+	public Type AssetType { get; } = typeof(MapAsset);
 
-public record CreatureAsset (string Id, string Kind, string Name, string Image) : Asset (Id, Kind) {
-	/// <summary>
-	/// The name of this <c>Asset</c> as it is used to describe it in the game.
-	/// </summary>
-	[JsonPropertyName("name")]
-	public string Name { get; init; } = Validator.RequireNonNullOrEmpty(Name, "Name must not be null or empty.");
+	public Asset LoadAsset(string id) {
+		throw new NotImplementedException();
+	}
 
-	/// <summary>
-	/// The path to the image file used for this <c>Asset</c> in the game.
-	/// </summary>
-	[JsonPropertyName("image")]
-	public string Image { get; init; } = Validator.RequireNonNullOrEmpty(Image, "Image must not be null or empty.");
+	public void SaveAsset(Asset asset) {
+		throw new NotImplementedException();
+	}
 }

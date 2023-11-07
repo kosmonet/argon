@@ -25,11 +25,11 @@ public record Asset (string Id, string Kind) {
 	/// The identifier of this <c>Asset</c>. Every <c>Asset</c> has a unique identifier.
 	/// </summary>
 	[JsonPropertyName("id")]
-	public string Id { get; init; } = !string.IsNullOrEmpty(Id) ? Id : throw new ArgumentException("Id must not be null or empty.");
+	public string Id { get; init; } = Validator.RequireNonNullOrEmpty(Id, "Id must not be null or empty.");
 
 	/// <summary>
 	/// The kind of <c>Asset</c>.
 	/// </summary>
 	[JsonPropertyName("kind")]
-	public string Kind { get; init; } = !string.IsNullOrEmpty(Kind) ? Kind : throw new ArgumentException("Kind must not be null or empty.");
+	public string Kind { get; init; } = Validator.RequireNonNullOrEmpty(Kind, "Kind must not be null or empty.");
 }

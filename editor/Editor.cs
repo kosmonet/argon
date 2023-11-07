@@ -16,8 +16,10 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common.Files;
 using Argon.Common.Assets;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Argon.Editor;
 
@@ -30,8 +32,21 @@ public static class Editor {
 	/// </summary>
 	/// <returns></returns>
 	public static MauiApp CreateMauiApp() {
-		var root = Environment.GetCommandLineArgs()[1];
-		var assets = new AssetManager(root);
+		string root = Environment.GetCommandLineArgs()[1];
+		Debug.WriteLine(Path.GetDirectoryName(root));
+		var files = new ArgonFileSystem(Path.Combine(root, "..", "temp"));
+		files.AddModule(root);
+		var assets = new AssetManager();
+		assets.RegisterLoader(new CreatureLoader(files));
+		assets.RegisterLoader(new ItemLoader(files));
+		assets.RegisterLoader(new ModuleLoader(files));
+
+		ModuleAsset module = assets.GetAsset<ModuleAsset>("aneirin");
+
+		Debug.WriteLine(module);
+		Debug.WriteLine("");
+
+		assets.AddAsset(new ModuleAsset("test", "creature", "test"));
 
 		var builder = MauiApp.CreateBuilder();
 		builder

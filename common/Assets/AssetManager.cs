@@ -16,58 +16,26 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Text.Json;
-using System.Xml;
-using System.Diagnostics;
-
 namespace Argon.Common.Assets;
 
+/// <summary>
+/// 
+/// </summary>
 public class AssetManager {
-	public AssetManager(string path) {
-		using (var reader = new StreamReader(Path.Combine(path, "aneirin.xml"))) {
-			var document = new XmlDocument();
-			document.LoadXml(reader.ReadToEnd());
-			string id = document.DocumentElement.Attributes["id"].Value;
-			string title = document.DocumentElement.SelectSingleNode("title").InnerText;
-			string subtitle = document.DocumentElement.SelectSingleNode("subtitle").InnerText;
+	private readonly Dictionary<Type, IAssetLoader> _loaders = new();
 
-			var module = new ModuleAsset { Id = id, Title = title, Subtitle = subtitle };
-
-			Debug.WriteLine($"id: {module.Id}");
-			Debug.WriteLine($"title: {module.Title}");
-			Debug.WriteLine($"subtitle: {module.Subtitle}");
-			Debug.WriteLine("");
+	public void RegisterLoader(IAssetLoader loader) {
+		if(loader is not null) {
+			_loaders.Add(loader.AssetType, loader);
 		}
-
-		var items = Directory.EnumerateFiles(Path.Combine(path, "items"));
-
-		var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-		foreach (var item in items) {
-			using var reader = new StreamReader(item);
-			using var document = JsonDocument.Parse(reader.ReadToEnd());
-			JsonElement kind = document.RootElement.GetProperty("kind");
-			Asset asset;
-
-			switch (kind.GetString()) {
-				case "weapon":
-					asset = JsonSerializer.Deserialize<ItemAsset>(document, options);
-					break;
-				default:
-					asset = JsonSerializer.Deserialize<Asset>(document, options);
-					break;
-			}
-
-			Debug.WriteLine(asset);
-			Debug.WriteLine("");
-		}
-
-		var creature = new CreatureAsset("sdf", "sfe", "jiodsoi", "image");
-		Debug.WriteLine(creature);
-		Debug.WriteLine("");
 	}
 
-	public Asset GetAsset(string kind, string id) {
-		return new Asset("sdf", "wer");
+	public T GetAsset<T>(string id) where T : Asset {
+		T asset = (T)_loaders[typeof(T)].LoadAsset(id);
+		return asset;
+	}
+
+	public void AddAsset<T>(T asset) where T : Asset {
+		_loaders[typeof(T)].SaveAsset(asset);
 	}
 }
