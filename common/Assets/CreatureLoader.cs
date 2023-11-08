@@ -45,7 +45,7 @@ public class CreatureLoader : IAssetLoader {
 			FileInfo file = _files.LoadFile(_kind, $"{id}.json");
 			using var reader = new StreamReader(file.FullName);
 			CreatureAsset? asset = JsonSerializer.Deserialize<CreatureAsset>(reader.ReadToEnd());
-			_assets[id] = Validator.RequireNonNull(asset, $"No asset with id <{id}> found.");
+			_assets[id] = Guard.RequireNonNull(asset, $"No asset with id <{id}> found.");
 		}
 
 		return _assets[id];

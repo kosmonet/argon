@@ -18,6 +18,8 @@
 
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.IO.Compression;
 
 namespace Argon.Common.Files;
 
@@ -40,7 +42,7 @@ public class ArgonFileSystem {
 	/// </summary>
 	/// <param name="tempFolder">path to the temporary folder</param>
 	public ArgonFileSystem(string tempFolder) {
-		_tempFolder = Validator.RequireNonNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
+		_tempFolder = Guard.RequireNonNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
 		_saveFolder = _tempFolder;
 
 		if (Path.Exists(_tempFolder)) {
@@ -53,7 +55,7 @@ public class ArgonFileSystem {
 	}
 
 	public void SetSaveFolder(string path) {
-		_saveFolder = Validator.RequireNonNullOrEmpty(path, "Save path must not be empty or null.");
+		_saveFolder = Guard.RequireNonNullOrEmpty(path, "Save path must not be empty or null.");
 		if (Path.Exists(_saveFolder)) {
 			_logger.LogInformation("Set save folder to {folder}", _saveFolder);
 		} else {
@@ -63,7 +65,9 @@ public class ArgonFileSystem {
 	}
 
 	public void AddModule(string path) {
-		_modules.Push(Validator.RequireNonNullOrEmpty(path, "Module path must not be empty or null."));
+		if (Directory.Exists(path) || IsZipFile(path)) {
+			_modules.Push(Guard.RequireNonNullOrEmpty(path, "Module path must not be empty or null."));
+		}
 	}
 
 	internal FileInfo LoadFile(params string[] path) {
@@ -93,9 +97,25 @@ public class ArgonFileSystem {
 
 		// then check each module from last to first
 		foreach (string module in _modules) {
-			file = new FileInfo(Path.Combine(module, path));
-			if (file.Exists) {
-				return file;
+			// modules can be in folders or zip archives
+			if (Directory.Exists(module)) {
+				file = new FileInfo(Path.Combine(module, path));
+				if (file.Exists) {
+					return file;
+				}
+			} else {
+				ZipArchive archive = ZipFile.OpenRead(module);
+				// ugly hack because .Net does not automatically swaps slashes when opening zip archives
+				ZipArchiveEntry? entry = archive.GetEntry(path.Replace("\\", "/"));
+				if (entry is not null) {
+					string extracted = Path.Combine(_tempFolder, path);
+					file = new FileInfo(Path.Combine(_tempFolder, path));
+					if (file.DirectoryName is not null) {
+						Directory.CreateDirectory(file.DirectoryName);
+						entry.ExtractToFile(extracted);
+						return file;
+					}
+				}
 			}
 		}
 
@@ -120,6 +140,15 @@ public class ArgonFileSystem {
 
 		foreach (string directory in Directory.EnumerateDirectories(path)) {
 			Directory.Delete(directory, true);
+		}
+	}
+
+	private static bool IsZipFile(string path) {
+		try {
+			ZipFile.OpenRead(path);
+			return true;
+		} catch {
+			return false;
 		}
 	}
 }

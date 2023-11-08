@@ -25,13 +25,13 @@ public record ItemAsset(string Id, string Kind, string Name, string Image) : Ass
 	/// The name of this <c>ItemAsset</c> as displayed in the game.
 	/// </summary>
 	[JsonPropertyName("name")]
-	public string Name { get; init; } = Validator.RequireNonNullOrEmpty(Name, "Name must not be null or empty.");
+	public string Name { get; init; } = Guard.RequireNonNullOrEmpty(Name, "Name must not be null or empty.");
 
 	/// <summary>
 	/// The path to the image file used for this <c>ItemAsset</c> in the game.
 	/// </summary>
 	[JsonPropertyName("image")]
-	public string Image { get; init; } = Validator.RequireNonNullOrEmpty(Image, "Id must not be null or empty.");
+	public string Image { get; init; } = Guard.RequireNonNullOrEmpty(Image, "Id must not be null or empty.");
 
 	public record Weapon(string Id, string Kind, string Name, string Image) : ItemAsset(Id, Kind, Name, Image);
 	public record Clothing(string Id, string Kind, string Name, string Image) : ItemAsset(Id, Kind, Name, Image);

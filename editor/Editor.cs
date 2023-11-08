@@ -36,17 +36,12 @@ public static class Editor {
 		Debug.WriteLine(Path.GetDirectoryName(root));
 		var files = new ArgonFileSystem(Path.Combine(root, "..", "temp"));
 		files.AddModule(root);
+		files.AddModule(Path.Combine(root, "..", "test.zip"));
 		var assets = new AssetManager();
 		assets.RegisterLoader(new CreatureLoader(files));
 		assets.RegisterLoader(new ItemLoader(files));
 		assets.RegisterLoader(new ModuleLoader(files));
-
-		ModuleAsset module = assets.GetAsset<ModuleAsset>("aneirin");
-
-		Debug.WriteLine(module);
-		Debug.WriteLine("");
-
-		assets.AddAsset(new ModuleAsset("test", "creature", "test"));
+		Debug.WriteLine(assets.GetAsset<ItemAsset>("fork"));
 
 		var builder = MauiApp.CreateBuilder();
 		builder

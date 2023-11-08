@@ -21,7 +21,7 @@ namespace Argon.Common;
 /// <summary>
 /// Collection of methods to validate parameters.
 /// </summary>
-internal class Validator {
+internal class Guard {
 	/// <summary>
 	/// Checks if value is null. If so, throws an ArgumentNullException, otherwise returns value.
 	/// </summary>
