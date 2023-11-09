@@ -25,11 +25,11 @@ public record CreatureAsset (string Id, string Kind, string Name, string Image) 
 	/// The name of this <c>Asset</c> as it is used to describe it in the game.
 	/// </summary>
 	[JsonPropertyName("name")]
-	public string Name { get; init; } = Guard.RequireNonNullOrEmpty(Name, "Name must not be null or empty.");
+	public string Name { get; init; } = Guard.NonNullOrEmpty(Name, "Name must not be null or empty.");
 
 	/// <summary>
 	/// The path to the image file used for this <c>Asset</c> in the game.
 	/// </summary>
 	[JsonPropertyName("image")]
-	public string Image { get; init; } = Guard.RequireNonNullOrEmpty(Image, "Image must not be null or empty.");
+	public string Image { get; init; } = Guard.NonNullOrEmpty(Image, "Image must not be null or empty.");
 }

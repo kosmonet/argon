@@ -16,13 +16,19 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Editor; 
+using Argon.Common.Assets;
+using System.Diagnostics;
+
+namespace Argon.Editor;
 
 /// <summary>
 /// Combines App.xaml and AppShell.xaml in one.
 /// </summary>
 public partial class App : Application {
-	public App() {
+
+	public App(AssetManager assets) {
 		InitializeComponent();
+
+		Debug.WriteLine(assets.GetAsset<ItemAsset>("sword"));
 	}
 }

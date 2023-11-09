@@ -48,7 +48,7 @@ public class ItemLoader : IAssetLoader {
 				_ => JsonSerializer.Deserialize<ItemAsset>(document),
 			};
 
-			_assets[id] = item ?? throw new ArgumentException($"Could not find <{id}>.");
+			_assets[id] = item ?? throw new ArgumentException($"Could not find '{id}'.");
 		}
 
 		return _assets[id];

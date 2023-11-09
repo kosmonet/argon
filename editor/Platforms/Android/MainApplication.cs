@@ -1,7 +1,8 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Argon.Editor; 
+namespace Argon.Editor;
+
 [Application]
 public class MainApplication : MauiApplication {
 	public MainApplication(IntPtr handle, JniHandleOwnership ownership)

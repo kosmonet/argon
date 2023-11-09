@@ -18,7 +18,6 @@
 
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.IO.Compression;
 
 namespace Argon.Common.Files;
@@ -42,7 +41,7 @@ public class ArgonFileSystem {
 	/// </summary>
 	/// <param name="tempFolder">path to the temporary folder</param>
 	public ArgonFileSystem(string tempFolder) {
-		_tempFolder = Guard.RequireNonNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
+		_tempFolder = Guard.NonNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
 		_saveFolder = _tempFolder;
 
 		if (Path.Exists(_tempFolder)) {
@@ -55,7 +54,7 @@ public class ArgonFileSystem {
 	}
 
 	public void SetSaveFolder(string path) {
-		_saveFolder = Guard.RequireNonNullOrEmpty(path, "Save path must not be empty or null.");
+		_saveFolder = Guard.NonNullOrEmpty(path, "Save path must not be empty or null.");
 		if (Path.Exists(_saveFolder)) {
 			_logger.LogInformation("Set save folder to {folder}", _saveFolder);
 		} else {
@@ -66,7 +65,7 @@ public class ArgonFileSystem {
 
 	public void AddModule(string path) {
 		if (Directory.Exists(path) || IsZipFile(path)) {
-			_modules.Push(Guard.RequireNonNullOrEmpty(path, "Module path must not be empty or null."));
+			_modules.Push(Guard.NonNullOrEmpty(path, "Module path must not be empty or null."));
 		}
 	}
 
@@ -95,7 +94,7 @@ public class ArgonFileSystem {
 			return file;
 		}
 
-		// then check each module from last to first
+		// finally check each module from last to first
 		foreach (string module in _modules) {
 			// modules can be in folders or zip archives
 			if (Directory.Exists(module)) {
@@ -105,7 +104,7 @@ public class ArgonFileSystem {
 				}
 			} else {
 				ZipArchive archive = ZipFile.OpenRead(module);
-				// ugly hack because .Net does not automatically swaps slashes when opening zip archives
+				// ugly hack because .Net does not automatically swap slashes when opening zip archives
 				ZipArchiveEntry? entry = archive.GetEntry(path.Replace("\\", "/"));
 				if (entry is not null) {
 					string extracted = Path.Combine(_tempFolder, path);

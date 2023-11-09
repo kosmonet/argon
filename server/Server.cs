@@ -8,7 +8,7 @@ internal class Server {
 
 		String path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-		FileInfo info = new FileInfo(path);
+		FileInfo info = new(path);
 
 		Console.WriteLine($"Full Name: {info.FullName}{Environment.NewLine}Directory: {info.Directory}{Environment.NewLine}Extension: {info.Extension}{Environment.NewLine}Create Date: {info.CreationTime}");
 	}

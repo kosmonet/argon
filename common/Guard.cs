@@ -21,7 +21,7 @@ namespace Argon.Common;
 /// <summary>
 /// Collection of methods to validate parameters.
 /// </summary>
-internal class Guard {
+public class Guard {
 	/// <summary>
 	/// Checks if value is null. If so, throws an ArgumentNullException, otherwise returns value.
 	/// </summary>
@@ -29,7 +29,7 @@ internal class Guard {
 	/// <param name="value"></param>
 	/// <param name="message"></param>
 	/// <returns></returns>
-	internal static T RequireNonNull<T> (T? value, string message) {
+	public static T NonNull<T> (T? value, string message) {
 		ArgumentNullException.ThrowIfNull(value, message);
 		return value;
 	}
@@ -40,7 +40,7 @@ internal class Guard {
 	/// <param name="value"></param>
 	/// <param name="message"></param>
 	/// <returns></returns>
-	internal static string RequireNonNullOrEmpty(string? value, string message) {
+	public static string NonNullOrEmpty(string? value, string message) {
 		ArgumentException.ThrowIfNullOrEmpty(value, message);
 		return value;
 	}

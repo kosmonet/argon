@@ -33,15 +33,12 @@ public static class Editor {
 	/// <returns></returns>
 	public static MauiApp CreateMauiApp() {
 		string root = Environment.GetCommandLineArgs()[1];
-		Debug.WriteLine(Path.GetDirectoryName(root));
 		var files = new ArgonFileSystem(Path.Combine(root, "..", "temp"));
 		files.AddModule(root);
-		files.AddModule(Path.Combine(root, "..", "test.zip"));
 		var assets = new AssetManager();
 		assets.RegisterLoader(new CreatureLoader(files));
 		assets.RegisterLoader(new ItemLoader(files));
 		assets.RegisterLoader(new ModuleLoader(files));
-		Debug.WriteLine(assets.GetAsset<ItemAsset>("fork"));
 
 		var builder = MauiApp.CreateBuilder();
 		builder
@@ -52,6 +49,9 @@ public static class Editor {
 			});
 
 		builder.Logging.AddDebug();
+		builder.Services.AddSingleton(files);
+		builder.Services.AddSingleton(assets);
+
 		return builder.Build();
 	}
 }

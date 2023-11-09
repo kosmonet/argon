@@ -16,12 +16,13 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common.Assets;
+using System.Diagnostics;
+
 namespace Argon.Editor.Views;
 
-public partial class StartPage : ContentPage
-{
-	public StartPage()
-	{
+public partial class StartPage : ContentPage {
+	public StartPage() {
 		InitializeComponent();
 	}
 }

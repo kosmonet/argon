@@ -25,11 +25,11 @@ public record Asset (string Id, string Kind) {
 	/// The identifier of this <c>Asset</c>. Every <c>Asset</c> has a unique identifier.
 	/// </summary>
 	[JsonPropertyName("id")]
-	public string Id { get; init; } = Guard.RequireNonNullOrEmpty(Id, "Id must not be null or empty.");
+	public string Id { get; init; } = Guard.NonNullOrEmpty(Id, "Id must not be null or empty.");
 
 	/// <summary>
 	/// The kind of <c>Asset</c>.
 	/// </summary>
 	[JsonPropertyName("kind")]
-	public string Kind { get; init; } = Guard.RequireNonNullOrEmpty(Kind, "Kind must not be null or empty.");
+	public string Kind { get; init; } = Guard.NonNullOrEmpty(Kind, "Kind must not be null or empty.");
 }
