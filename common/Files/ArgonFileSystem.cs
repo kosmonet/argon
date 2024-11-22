@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -29,19 +29,19 @@ namespace Argon.Common.Files;
 /// </summary>
 public class ArgonFileSystem {
 	private readonly ConcurrentStack<string> _modules = new();
-	private readonly ILogger _logger = LogHelper.GetLogger();
+	private readonly ILogger _logger = LogHelper.Logger;
 
 	private readonly string _tempFolder;
 	private string _saveFolder;
 
 	/// <summary>
-	/// Creates a new file system with the given temporary and save folder 
-	/// paths. The folders are created if they do not exist yet. The contents 
+	/// Creates a new file system with the given temporary folder 
+	/// path. The folder is created if it does not exist yet. The contents 
 	/// of the temp folder are cleared before use.
 	/// </summary>
-	/// <param name="tempFolder">path to the temporary folder</param>
+	/// <param name="tempFolder">Path to the temporary folder.</param>
 	public ArgonFileSystem(string tempFolder) {
-		_tempFolder = Guard.NonNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
+		_tempFolder = Guard.NotNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
 		_saveFolder = _tempFolder;
 
 		if (Path.Exists(_tempFolder)) {
@@ -53,8 +53,12 @@ public class ArgonFileSystem {
 		}
 	}
 
+	/// <summary>
+	/// Sets the path of the save folder.
+	/// </summary>
+	/// <param name="path"></param>
 	public void SetSaveFolder(string path) {
-		_saveFolder = Guard.NonNullOrEmpty(path, "Save path must not be empty or null.");
+		_saveFolder = Guard.NotNullOrEmpty(path, "Save path must not be empty or null.");
 		if (Path.Exists(_saveFolder)) {
 			_logger.LogInformation("Set save folder to {folder}", _saveFolder);
 		} else {
@@ -65,7 +69,7 @@ public class ArgonFileSystem {
 
 	public void AddModule(string path) {
 		if (Directory.Exists(path) || IsZipFile(path)) {
-			_modules.Push(Guard.NonNullOrEmpty(path, "Module path must not be empty or null."));
+			_modules.Push(Guard.NotNullOrEmpty(path, "Module path must not be empty or null."));
 		}
 	}
 
@@ -76,8 +80,8 @@ public class ArgonFileSystem {
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="path">the relative path to the requested file</param>
-	/// <returns>a FileInfo object that points to the requested relative path</returns>
+	/// <param name="path">The relative path to the requested file.</param>
+	/// <returns>A FileInfo object that points to the requested relative path.</returns>
 	/// <exception cref="FileNotFoundException"></exception>
 	internal FileInfo LoadFile(string path) {
 		_logger.LogInformation("Load file: {path}", path);

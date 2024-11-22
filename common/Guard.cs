@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ public class Guard {
 	/// <param name="value"></param>
 	/// <param name="message"></param>
 	/// <returns></returns>
-	public static T NonNull<T> (T? value, string message) {
+	public static T NotNull<T> (T? value, string message) {
 		ArgumentNullException.ThrowIfNull(value, message);
 		return value;
 	}
@@ -40,7 +40,7 @@ public class Guard {
 	/// <param name="value"></param>
 	/// <param name="message"></param>
 	/// <returns></returns>
-	public static string NonNullOrEmpty(string? value, string message) {
+	public static string NotNullOrEmpty(string? value, string message) {
 		ArgumentException.ThrowIfNullOrEmpty(value, message);
 		return value;
 	}

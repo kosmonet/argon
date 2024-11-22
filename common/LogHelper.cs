@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -20,10 +20,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 
 namespace Argon.Common;
-public static class LogHelper {
-	private static readonly ILogger logger = new DebugLoggerProvider().CreateLogger("argon");
 
-	public static ILogger GetLogger() {
-		return logger;
-	}
+/// <summary>
+/// Contains common methods related to logging.
+/// </summary>
+public static class LogHelper {
+	/// <summary>
+	/// A logger that logs to the debug output by default.
+	/// </summary>
+	public static ILogger Logger { get; } = new DebugLoggerProvider().CreateLogger("argon");
 }
