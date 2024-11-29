@@ -16,13 +16,13 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Argon.Common;
-using Microsoft.Extensions.Logging;
 
 namespace Argon.Editor;
 
@@ -36,12 +36,27 @@ internal class Settings {
 	private record Configuration {
 		[JsonInclude]
 		[JsonPropertyName("modules")]
-		public Dictionary<string, string> _modules = new();
+		public HashSet<string> _modules = [];
+
+		[JsonInclude]
+		[JsonPropertyName("data")]
+		public string _dataFolder = Path.Combine(System.AppContext.BaseDirectory, "data");
 	}
+
+	/// <summary>
+	/// A set containing the names and paths of all known game modules.
+	/// </summary>
+	internal HashSet<string> Modules { get { return _configuration._modules; } }
+	/// <summary>
+	/// The path to the data folder containing all game modules.
+	/// </summary>
+	internal string DataFolder { get { return _configuration._dataFolder; } }
 
 	private readonly ILogger _logger = LogHelper.Logger;
 	private readonly Configuration _configuration;
 	private readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Argon", "editor.conf");
+	private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+
 
 	/// <summary>
 	/// Initializes the settings.
@@ -50,7 +65,7 @@ internal class Settings {
 		// check if the settings file exists
 		if (!File.Exists(filePath)) {
 			// if it doesn't, create an empty settings file
-			_logger.LogInformation("Creating configuration.");
+			_logger.LogInformation("creating configuration");
 			string folderPath = Guard.NotNullOrEmpty(Path.GetDirectoryName(filePath), "Application folder not available.");
 			Directory.CreateDirectory(folderPath);
 
@@ -61,18 +76,20 @@ internal class Settings {
 			Save();
 		} else {
 			// if it does, load configuration from the settings file
-			_logger.LogInformation("Loading configuration.");
+			_logger.LogInformation("loading configuration");
 			using FileStream fileStream = File.OpenRead(filePath);
 			_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), "Application folder not available.");
 		}
+
+		_logger.LogInformation("data folder set to {folder}", _configuration._dataFolder);
+
 	}
 
 	/// <summary>
 	/// Saves the configuration to the settings file.
 	/// </summary>
 	internal void Save() {
-		JsonSerializerOptions options = new() { WriteIndented = true };
 		using FileStream fileStream = File.Create(filePath);
-		JsonSerializer.Serialize(fileStream, _configuration, options);
+		JsonSerializer.Serialize(fileStream, _configuration, _options);
 	}
 }

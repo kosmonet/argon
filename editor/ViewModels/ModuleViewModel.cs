@@ -16,9 +16,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using CommunityToolkit.Mvvm.ComponentModel;
-
 namespace Argon.Editor.ViewModels;
+internal class ModuleViewModel : ViewModelBase {
 
-public class ViewModelBase : ObservableObject {
 }

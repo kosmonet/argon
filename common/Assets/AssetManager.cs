@@ -22,7 +22,7 @@ namespace Argon.Common.Assets;
 /// 
 /// </summary>
 public class AssetManager {
-	private readonly Dictionary<Type, IAssetLoader> _loaders = new();
+	private readonly Dictionary<Type, IAssetLoader> _loaders = [];
 
 	public void RegisterLoader(IAssetLoader loader) {
 		if(loader is not null) {

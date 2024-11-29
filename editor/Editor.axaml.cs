@@ -20,11 +20,15 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using System;
+using Microsoft.Extensions.Logging;
 
 using Argon.Editor.Views;
 using Argon.Common;
-using System;
-using Microsoft.Extensions.Logging;
+using Argon.Editor.ViewModels;
+using Argon.Common.Files;
+using Argon.Common.Assets;
+using System.IO;
 
 namespace Argon.Editor;
 
@@ -34,9 +38,13 @@ namespace Argon.Editor;
 public partial class Editor : Application {
 	private readonly ILogger _logger = LogHelper.Logger;
 	private readonly Settings _settings = new();
+	private readonly ArgonFileSystem _files;
+	private readonly AssetManager _assets = new();
 
 	public Editor() {
-
+		_files = new ArgonFileSystem(Path.Combine(_settings.DataFolder, "temp"));
+		_settings.Modules.Add("aneirin");
+		_settings.Save();
 	}
 
 	public override void Initialize() {
@@ -49,7 +57,9 @@ public partial class Editor : Application {
 		BindingPlugins.DataValidators.RemoveAt(0);
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-			desktop.MainWindow = new ModuleWindow();
+			desktop.MainWindow = new ModuleWindow() {
+				DataContext = new ModuleViewModel()
+			};
 		}
 
 		base.OnFrameworkInitializationCompleted();
@@ -61,7 +71,14 @@ public partial class Editor : Application {
 	/// <param name="args">The command-line arguments.</param>
 	[STAThread]
 	public static void Main(string[] args) {
-		var builder = AppBuilder.Configure<Editor>().UsePlatformDetect().WithInterFont().LogToTrace();
-		builder.StartWithClassicDesktopLifetime(args);
+		BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+	}
+
+	/// <summary>
+	/// Avalonia configuration, don't remove; also used by visual designer.
+	/// </summary>
+	/// <returns>An AppBuilder instance.</returns>
+	public static AppBuilder BuildAvaloniaApp() {
+		return AppBuilder.Configure<Editor>().UsePlatformDetect().WithInterFont().LogToTrace();
 	}
 }

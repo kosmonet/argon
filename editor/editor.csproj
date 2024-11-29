@@ -3,52 +3,33 @@
     <OutputType>WinExe</OutputType>
     <!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
     One for Windows with net7.0-windows TFM, one for MacOS with net7.0-macos and one with net7.0 TFM for Linux.-->
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RootNamespace>Argon.Editor</RootNamespace>
   </PropertyGroup>
+	
   <ItemGroup>
-    <None Remove="Assets\avalonia-logo.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <AvaloniaResource Include="Assets\avalonia-logo.ico" />
+    <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
-    <PackageReference Include="Avalonia" Version="11.2.1">
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.2" />
+    <PackageReference Include="Avalonia" Version="11.2.2">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-	<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1">
+	<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.2">
 	  <TreatAsUsed>true</TreatAsUsed>
 	</PackageReference>
-	<PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
+	<PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.2" />
 	<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-	<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.1" />
+	<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.2" />
 	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Editor.axaml.cs">
-      <DependentUpon>Editor.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainView.axaml.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow.axaml.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Presenters\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\ModuleWindow.axaml" />
   </ItemGroup>
 
   <ItemGroup>
