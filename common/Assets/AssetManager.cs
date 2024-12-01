@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -16,26 +16,54 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Runtime.Caching;
+
 namespace Argon.Common.Assets;
 
 /// <summary>
-/// 
+/// Manages game assets. Before adding or requesting an asset, the correct loader for that asset
+/// should be registered. Assets are cached after they have been loaded. This class is quite dirty 
+/// because it does various evil things with generics and casting.
 /// </summary>
 public class AssetManager {
-	private readonly Dictionary<Type, IAssetLoader> _loaders = [];
+	private readonly Dictionary<Type, Object> _loaders = [];
+	private readonly ObjectCache _cache = MemoryCache.Default;
+	private readonly CacheItemPolicy _policy = new();
 
-	public void RegisterLoader(IAssetLoader loader) {
-		if(loader is not null) {
+	/// <summary>
+	/// Registers a loader for a certain type of asset.
+	/// </summary>
+	/// <typeparam name="T">The type of asset the loader can handle.</typeparam>
+	/// <param name="loader">The asset loader for the given type.</param>
+	public void RegisterLoader<T>(IAssetLoader<T> loader) where T : Asset {
 			_loaders.Add(loader.AssetType, loader);
+	}
+
+	/// <summary>
+	/// Returns an asset of the requested type with the given id.
+	/// </summary>
+	/// <typeparam name="T">The type of asset to return.</typeparam>
+	/// <param name="id">The id of the asset.</param>
+	/// <returns>The asset of the given type and id.</returns>
+	public T GetAsset<T>(string id) where T : Asset {
+		if (_cache.Contains($"{typeof(T).Name}:{id}")) {
+			return (T)_cache.Get($"{typeof(T).Name}:{id}");
+		} else {
+			IAssetLoader<T> loader = (IAssetLoader<T>)_loaders[typeof(T)];
+			T asset = loader.LoadAsset(id);
+			AddAsset(asset);
+			return asset;
 		}
 	}
 
-	public T GetAsset<T>(string id) where T : Asset {
-		T asset = (T)_loaders[typeof(T)].LoadAsset(id);
-		return asset;
-	}
-
+	/// <summary>
+	/// Adds an asset.
+	/// </summary>
+	/// <typeparam name="T">The type of the asset.</typeparam>
+	/// <param name="asset">The asset to be added.</param>
 	public void AddAsset<T>(T asset) where T : Asset {
-		_loaders[typeof(T)].SaveAsset(asset);
+		_cache.Set($"{typeof(T).Name}:{asset.Id}", asset, _policy);
+		IAssetLoader<T> loader = (IAssetLoader<T>)_loaders[typeof(T)];
+		loader.SaveAsset(asset);
 	}
 }

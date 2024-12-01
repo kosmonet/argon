@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -21,16 +21,14 @@ using System.Xml;
 
 namespace Argon.Common.Assets;
 
-public class ModuleLoader : IAssetLoader {
+public class ModuleLoader : IAssetLoader<ModuleAsset> {
 	private readonly ArgonFileSystem _files;
-
-	public Type AssetType { get; } = typeof(ModuleAsset);
 
 	public ModuleLoader(ArgonFileSystem fileSystem) { 
 		_files = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
-	public Asset LoadAsset(string id) {
+	public ModuleAsset LoadAsset(string id) {
 		FileInfo file = _files.LoadFile($"{id}.xml");
 		using var reader = new StreamReader(file.FullName);
 		var document = new XmlDocument();
@@ -43,12 +41,13 @@ public class ModuleLoader : IAssetLoader {
 		XmlNode subNode = root.SelectSingleNode("subtitle") ?? throw new ArgumentException(id);
 		string subtitle = subNode.InnerText;
 
-		return new ModuleAsset(id, title, subtitle);
+		XmlNode descriptionNode = root.SelectSingleNode("description") ?? throw new ArgumentException(id);
+		string description = descriptionNode.InnerText;
+
+		return new ModuleAsset(id, title, subtitle, description);
 	}
 
-	public void SaveAsset(Asset asset) {
-		ModuleAsset module = (ModuleAsset) asset;
-
+	public void SaveAsset(ModuleAsset module) {
 		XmlDocument document = new();
 		XmlElement root = document.CreateElement("module");
 		root.SetAttribute("id", module.Id);
@@ -59,6 +58,9 @@ public class ModuleLoader : IAssetLoader {
 		XmlElement subtitle = document.CreateElement("subtitle");
 		subtitle.InnerText = module.Subtitle;
 		root.AppendChild(subtitle);
+		XmlElement description = document.CreateElement("description");
+		subtitle.InnerText = module.Description;
+		root.AppendChild(description);
 
 		FileInfo file = _files.SaveFile($"{module.Id}.xml");
 		using var stream = file.Create();

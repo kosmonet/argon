@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -19,11 +19,25 @@
 namespace Argon.Common.Assets; 
 
 /// <summary>
-/// 
+/// Interface for a generic asset loader. It is up to the concrete implementations to decide where 
+/// to save and load the assets (JSON, XML, database, ...).
 /// </summary>
-public interface IAssetLoader {
-	internal Type AssetType { get; }
+public interface IAssetLoader<T> where T : Asset {
+	/// <summary>
+	/// The type of asset this loader can handle.
+	/// </summary>
+	internal Type AssetType { get => typeof(T); }
 
-	internal Asset LoadAsset(string id);
-	internal void SaveAsset(Asset asset);
+	/// <summary>
+	/// Loads an asset.
+	/// </summary>
+	/// <param name="id">The id of the asset.</param>
+	/// <returns>An asset with the given id.</returns>
+	internal T LoadAsset(string id);
+
+	/// <summary>
+	/// Saves an asset.
+	/// </summary>
+	/// <param name="asset">The asset to be saved.</param>
+	internal void SaveAsset(T asset);
 }

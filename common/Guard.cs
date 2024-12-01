@@ -19,7 +19,7 @@
 namespace Argon.Common;
 
 /// <summary>
-/// Collection of methods to validate parameters.
+/// A collection of methods to validate parameters.
 /// </summary>
 public class Guard {
 	/// <summary>
@@ -28,7 +28,7 @@ public class Guard {
 	/// <typeparam name="T"></typeparam>
 	/// <param name="value"></param>
 	/// <param name="message"></param>
-	/// <returns></returns>
+	/// <returns>The original value (if it is not null).</returns>
 	public static T NotNull<T> (T? value, string message) {
 		ArgumentNullException.ThrowIfNull(value, message);
 		return value;
@@ -39,7 +39,7 @@ public class Guard {
 	/// </summary>
 	/// <param name="value"></param>
 	/// <param name="message"></param>
-	/// <returns></returns>
+	/// <returns>The original value (if it is not null or empty).</returns>
 	public static string NotNullOrEmpty(string? value, string message) {
 		ArgumentException.ThrowIfNullOrEmpty(value, message);
 		return value;

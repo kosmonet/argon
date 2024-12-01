@@ -29,10 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\common\common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\common\common.csproj" />
+    <Compile Update="Views\ModulePanel.axaml.cs">
+      <DependentUpon>ModulePanel.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

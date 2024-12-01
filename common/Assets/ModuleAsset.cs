@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -24,4 +24,4 @@ namespace Argon.Common.Assets;
 /// <param name="Id"></param>
 /// <param name="Title"></param>
 /// <param name="Subtitle"></param>
-public record ModuleAsset(string Id, string Title, string Subtitle) : Asset(Id, "module");
+public record ModuleAsset(string Id, string Title, string Subtitle, string Description) : Asset(Id, "module");

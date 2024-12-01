@@ -16,7 +16,48 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Editor.ViewModels;
-internal class ModuleViewModel : ViewModelBase {
+using Argon.Common;
+using Argon.Common.Assets;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 
+namespace Argon.Editor.ViewModels;
+
+public partial class ModuleViewModel(ModuleAsset module) : ObservableObject {
+	private static readonly ILogger _logger = LogHelper.Logger;
+
+	/// <summary>
+	/// The id of a module.
+	/// </summary>
+	[ObservableProperty]
+	private string _id = module.Id;
+
+	/// <summary>
+	/// The title of a module.
+	/// </summary>
+	[ObservableProperty]
+	private string _title = module.Title;
+
+	/// <summary>
+	/// The subtitle of a module.
+	/// </summary>
+	[ObservableProperty]
+	private string _subtitle = module.Subtitle;
+
+	/// <summary>
+	/// The short description of a module.
+	/// </summary>
+	[ObservableProperty]
+	private string? _description = module.Description;
+
+	[RelayCommand]
+	public void DeleteModule() {
+		_logger.LogInformation("delete module: {id}", Id);
+	}
+
+	[RelayCommand]
+	public void OpenModule() {
+		_logger.LogInformation("open module: {id}", Id);
+	}
 }

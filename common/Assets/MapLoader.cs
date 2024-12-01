@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -18,14 +18,12 @@
 
 namespace Argon.Common.Assets;
 
-internal class MapLoader : IAssetLoader {
-	public Type AssetType { get; } = typeof(MapAsset);
-
-	public Asset LoadAsset(string id) {
+internal class MapLoader : IAssetLoader<MapAsset> {
+	public MapAsset LoadAsset(string id) {
 		throw new NotImplementedException();
 	}
 
-	public void SaveAsset(Asset asset) {
+	public void SaveAsset(MapAsset asset) {
 		throw new NotImplementedException();
 	}
 }

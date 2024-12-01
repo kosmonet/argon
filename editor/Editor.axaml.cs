@@ -16,18 +16,18 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common;
+using Argon.Common.Assets;
+using Argon.Common.Files;
+using Argon.Editor.Models;
+using Argon.Editor.ViewModels;
+using Argon.Editor.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using System;
 using Microsoft.Extensions.Logging;
-
-using Argon.Editor.Views;
-using Argon.Common;
-using Argon.Editor.ViewModels;
-using Argon.Common.Files;
-using Argon.Common.Assets;
+using System;
 using System.IO;
 
 namespace Argon.Editor;
@@ -40,11 +40,24 @@ public partial class Editor : Application {
 	private readonly Settings _settings = new();
 	private readonly ArgonFileSystem _files;
 	private readonly AssetManager _assets = new();
+	private readonly ModuleWindowViewModel _moduleWindowViewModel;
 
 	public Editor() {
+		// initialize the file system with the correct temporary folder path
 		_files = new ArgonFileSystem(Path.Combine(_settings.DataFolder, "temp"));
-		_settings.Modules.Add("aneirin");
-		_settings.Save();
+
+		// register all necessary loaders with the asset manager
+		_assets.RegisterLoader(new ModuleLoader(_files));
+
+		// create the view models
+		_moduleWindowViewModel = new(_settings);
+
+		foreach (string id in _settings.Modules) {
+			_logger.LogInformation("add module: {id}", id);
+			_files.AddModule(Path.Combine(_settings.DataFolder, id));
+			ModuleAsset module = _assets.GetAsset<ModuleAsset>(id);
+			_moduleWindowViewModel.Modules.Add(new ModuleViewModel(module));
+		}
 	}
 
 	public override void Initialize() {
@@ -57,9 +70,7 @@ public partial class Editor : Application {
 		BindingPlugins.DataValidators.RemoveAt(0);
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-			desktop.MainWindow = new ModuleWindow() {
-				DataContext = new ModuleViewModel()
-			};
+			desktop.MainWindow = new ModuleWindow(_moduleWindowViewModel);
 		}
 
 		base.OnFrameworkInitializationCompleted();

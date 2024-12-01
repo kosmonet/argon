@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Argon, a roguelike engine.
  *	Copyright (C) 2024 - Maarten Driesen
  * 
@@ -16,14 +16,28 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Avalonia.Controls;
+using Argon.Common.Assets;
+using Argon.Editor.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 
-namespace Argon.Editor.Views;
+namespace Argon.Editor.ViewModels;
 
-internal partial class ModuleWindow : Window {
-	internal ModuleWindow(ObservableObject context) {
-		DataContext = context;
-		InitializeComponent();
+internal partial class ModuleWindowViewModel : ObservableObject {
+	/// <summary>
+	/// A collection of modules.
+	/// </summary>
+	public ObservableCollection<ModuleViewModel> Modules { get; } = [];
+
+	private readonly Settings _settings;
+
+	internal ModuleWindowViewModel(Settings settings) {
+		_settings = settings;
+
+		foreach (string id in settings.Modules) {
+/*			ModuleAsset module = _assets.GetAsset<ModuleAsset>(id);
+			_moduleWindowViewModel.Modules.Add(new ModuleViewModel(module));
+*/
+		}
 	}
 }

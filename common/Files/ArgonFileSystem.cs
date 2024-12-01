@@ -41,53 +41,70 @@ public class ArgonFileSystem {
 	/// </summary>
 	/// <param name="tempFolder">Path to the temporary folder.</param>
 	public ArgonFileSystem(string tempFolder) {
-		_tempFolder = Guard.NotNullOrEmpty(tempFolder, "Temp folder must not be empty or null.");
+		_tempFolder = tempFolder;
 		_saveFolder = _tempFolder;
 
 		if (Path.Exists(_tempFolder)) {
 			ClearFolder(_tempFolder);
-			_logger.LogInformation("Set temporary folder to {folder}", _tempFolder);
+			_logger.LogInformation("set temporary folder to {folder}", _tempFolder);
 		} else {
 			Directory.CreateDirectory(_tempFolder);
-			_logger.LogInformation("Created temporary folder {folder}", _tempFolder);
+			_logger.LogInformation("created temporary folder {folder}", _tempFolder);
 		}
 	}
 
 	/// <summary>
 	/// Sets the path of the save folder.
 	/// </summary>
-	/// <param name="path"></param>
+	/// <param name="path">Path to the save folder.</param>
 	public void SetSaveFolder(string path) {
-		_saveFolder = Guard.NotNullOrEmpty(path, "Save path must not be empty or null.");
+		_saveFolder = path;
 		if (Path.Exists(_saveFolder)) {
-			_logger.LogInformation("Set save folder to {folder}", _saveFolder);
+			_logger.LogInformation("set save folder to {folder}", _saveFolder);
 		} else {
 			Directory.CreateDirectory(_saveFolder);
-			_logger.LogInformation("Created save folder {folder}", _saveFolder);
+			_logger.LogInformation("created save folder {folder}", _saveFolder);
 		}
 	}
 
+	/// <summary>
+	/// Adds the files of a module to this file system. The file system does not check if the
+	/// given path actually contains a module.
+	/// </summary>
+	/// <param name="path">The full path of the module.</param>
 	public void AddModule(string path) {
 		if (Directory.Exists(path) || IsZipFile(path)) {
-			_modules.Push(Guard.NotNullOrEmpty(path, "Module path must not be empty or null."));
+			_modules.Push(path);
 		}
 	}
 
+	/// <summary>
+	/// Clears the file system. All modules are removed, only temp and save folder are retained.
+	/// </summary>
+	public void Clear() {
+		_modules.Clear();
+	}
+
+	/// <summary>
+	/// Loads a file from the given path.
+	/// </summary>
+	/// <param name="path">The relative path to the requested file.</param>
+	/// <returns>A FileInfo object that points to the requested relative path.</returns>
 	internal FileInfo LoadFile(params string[] path) {
 		return LoadFile(Path.Combine(path));
 	}
 
 	/// <summary>
-	/// 
+	/// Loads a file from the given path.
 	/// </summary>
 	/// <param name="path">The relative path to the requested file.</param>
 	/// <returns>A FileInfo object that points to the requested relative path.</returns>
 	/// <exception cref="FileNotFoundException"></exception>
 	internal FileInfo LoadFile(string path) {
-		_logger.LogInformation("Load file: {path}", path);
+		_logger.LogInformation("load file: {path}", path);
 
 		// first check the temp folder
-		var file = new FileInfo(Path.Combine(_tempFolder, path));
+		FileInfo file = new(Path.Combine(_tempFolder, path));
 		if (file.Exists) {
 			return file;
 		}
@@ -130,7 +147,7 @@ public class ArgonFileSystem {
 	}
 
 	internal FileInfo SaveFile(string path) {
-		var file = new FileInfo(Path.Combine(_tempFolder, path));
+		FileInfo file = new(Path.Combine(_tempFolder, path));
 		ArgumentNullException.ThrowIfNull(file.DirectoryName);
 		Directory.CreateDirectory(file.DirectoryName);
 		return file;

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *	Argon, a roguelike engine.
  *	Copyright (C) 2024 - Maarten Driesen
  * 
@@ -16,9 +16,12 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using CommunityToolkit.Mvvm.ComponentModel;
+using Avalonia.Controls;
 
-namespace Argon.Editor.ViewModels;
+namespace Argon.Editor.Views;
 
-public class ViewModelBase : ObservableObject {
+public partial class ModulePanel : UserControl {
+   public ModulePanel() {
+        InitializeComponent();
+    }
 }

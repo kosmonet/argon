@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -17,47 +17,36 @@
  */
 
 using Argon.Common.Files;
-using System.Collections.Concurrent;
 using System.Text.Json;
 
 namespace Argon.Common.Assets;
 
-public class ItemLoader : IAssetLoader {
+public class ItemLoader : IAssetLoader<ItemAsset> {
 	private readonly ArgonFileSystem _files;
 	private readonly string _kind = "items";
-	private readonly ConcurrentDictionary<string, ItemAsset> _assets = new();
-
-	public Type AssetType { get; } = typeof(ItemAsset);
 
 	public ItemLoader(ArgonFileSystem fileSystem) {
 		_files = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
-	public Asset LoadAsset(string id) {
-		if (!_assets.ContainsKey(id)) {
-			FileInfo file = _files.LoadFile(_kind, $"{id}.json");
-			using var reader = new StreamReader(file.FullName);
-			using var document = JsonDocument.Parse(reader.ReadToEnd());
-			JsonElement kind = document.RootElement.GetProperty("kind");
+	public ItemAsset LoadAsset(string id) {
+		FileInfo file = _files.LoadFile(_kind, $"{id}.json");
+		using var reader = new StreamReader(file.FullName);
+		using var document = JsonDocument.Parse(reader.ReadToEnd());
+		JsonElement kind = document.RootElement.GetProperty("kind");
 
-			ItemAsset? item = kind.GetString() switch {
-				"weapon" => JsonSerializer.Deserialize<ItemAsset.Weapon>(document),
-				"armor" => JsonSerializer.Deserialize<ItemAsset.Armor>(document),
-				"clothing" => JsonSerializer.Deserialize<ItemAsset.Clothing>(document),
-				"book" => JsonSerializer.Deserialize<ItemAsset.Book>(document),
-				_ => JsonSerializer.Deserialize<ItemAsset>(document),
-			};
+		ItemAsset? item = kind.GetString() switch {
+			"weapon" => JsonSerializer.Deserialize<ItemAsset.Weapon>(document),
+			"armor" => JsonSerializer.Deserialize<ItemAsset.Armor>(document),
+			"clothing" => JsonSerializer.Deserialize<ItemAsset.Clothing>(document),
+			"book" => JsonSerializer.Deserialize<ItemAsset.Book>(document),
+			_ => JsonSerializer.Deserialize<ItemAsset>(document),
+		};
 
-			_assets[id] = item ?? throw new ArgumentException($"Could not find '{id}'.");
-		}
-
-		return _assets[id];
+		return Guard.NotNull(item, $"The item with id <{id}> was not found");
 	}
 
-	public void SaveAsset(Asset asset) {
-		ItemAsset item = (ItemAsset)asset;
-		_assets[item.Id] = item;
-
+	public void SaveAsset(ItemAsset item) {
 		FileInfo file = _files.SaveFile(_kind, $"{item.Id}.json");
 		File.WriteAllText(file.FullName, JsonSerializer.Serialize(item));
 	}

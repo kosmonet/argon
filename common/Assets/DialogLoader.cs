@@ -18,14 +18,12 @@
 
 namespace Argon.Common.Assets;
 
-internal class DialogLoader : IAssetLoader {
-	public Type AssetType { get; } = typeof(DialogAsset);
-
-	public Asset LoadAsset(string id) {
+internal class DialogLoader : IAssetLoader<DialogAsset> {
+	public DialogAsset LoadAsset(string id) {
 		throw new NotImplementedException();
 	}
 
-	public void SaveAsset(Asset asset) {
+	public void SaveAsset(DialogAsset asset) {
 		throw new NotImplementedException();
 	}
 }

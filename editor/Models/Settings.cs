@@ -24,7 +24,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Argon.Editor;
+namespace Argon.Editor.Models;
 
 /// <summary>
 /// Keeps track of user settings.
@@ -40,13 +40,13 @@ internal class Settings {
 
 		[JsonInclude]
 		[JsonPropertyName("data")]
-		public string _dataFolder = Path.Combine(System.AppContext.BaseDirectory, "data");
+		public string _dataFolder = Path.Combine(AppContext.BaseDirectory, "data");
 	}
 
 	/// <summary>
 	/// A set containing the names and paths of all known game modules.
 	/// </summary>
-	internal HashSet<string> Modules { get { return _configuration._modules; } }
+	internal ISet<string> Modules { get { return _configuration._modules; } }
 	/// <summary>
 	/// The path to the data folder containing all game modules.
 	/// </summary>
@@ -81,7 +81,7 @@ internal class Settings {
 			_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), "Application folder not available.");
 		}
 
-		_logger.LogInformation("data folder set to {folder}", _configuration._dataFolder);
+		_logger.LogInformation("set data folder to {folder}", _configuration._dataFolder);
 
 	}
 
