@@ -39,7 +39,7 @@ public class CreatureLoader : IAssetLoader<CreatureAsset> {
 		FileInfo file = _files.LoadFile(_kind, $"{id}.json");
 		using var reader = new StreamReader(file.FullName);
 		CreatureAsset? creature = JsonSerializer.Deserialize<CreatureAsset>(reader.ReadToEnd());
-		return Guard.NotNull(creature, $"The creature with id <{id}> was not found");
+		return Guard.NotNull(creature, $"The creature with id <{id}> was not found.");
 	}
 
 	public void SaveAsset(CreatureAsset creature) {

@@ -2,34 +2,42 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:views="using:Argon.Editor.Views"
+		xmlns:assets="using:Argon.Common.Assets"
+		xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
 		xmlns:vm="using:Argon.Editor.ViewModels"
+		xmlns:views="using:Argon.Editor.Views"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
 		Width="800" Height="600" WindowStartupLocation="CenterScreen"
 		x:Class="Argon.Editor.Views.ModuleWindow"
-		x:DataType="vm:ModuleWindowViewModel"
+		x:Name="moduleWindow"
 		Title="Argon Editor">
-
-	<DockPanel>
-		<Border DockPanel.Dock="Top" Margin="10 0">
-			<StackPanel Height="50" Spacing="10" Orientation="Horizontal">
-				<Button>Create new module</Button>
-				<Button>Add existing module</Button>
+	<dialogHost:DialogHost>
+		<dialogHost:DialogHost.DialogContent>
+			<StackPanel Orientation="Vertical" Spacing="10" Width="400">
+				<TextBlock TextWrapping="Wrap">This stuff should do something.</TextBlock>
+				<StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Center">
+					<Button>Something</Button>
+					<Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
+				</StackPanel>
 			</StackPanel>
-		</Border>
-
-		<ScrollViewer AllowAutoHide="False">
-			<Border BorderThickness="5">
-				<StackPanel Spacing="5" Orientation="Vertical">
-					<ItemsControl ItemsSource="{Binding Modules}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<views:ModulePanel />
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
+		</dialogHost:DialogHost.DialogContent>
+		
+		<DockPanel>
+			<Border DockPanel.Dock="Top" Margin="10 0">
+				<StackPanel Height="50" Spacing="10" Orientation="Horizontal">
+					<Button Command="{Binding CreateModuleCommand}">Create new module</Button>
+					<Button Command="{Binding AddModuleCommand}">Add existing module</Button>
+					<Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Do something</Button>
 				</StackPanel>
 			</Border>
-		</ScrollViewer>
-	</DockPanel>
+
+			<ListBox ItemsSource="{Binding Modules}">
+				<ListBox.DataTemplates>
+					<DataTemplate x:DataType="vm:ModuleViewModel">
+						<views:ModuleView/>
+					</DataTemplate>
+				</ListBox.DataTemplates>
+			</ListBox>
+		</DockPanel>
+	</dialogHost:DialogHost>
 </Window>

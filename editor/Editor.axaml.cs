@@ -16,17 +16,16 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Argon.Common;
 using Argon.Common.Assets;
 using Argon.Common.Files;
-using Argon.Editor.Models;
+using Argon.Editor.Services;
 using Argon.Editor.ViewModels;
 using Argon.Editor.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 
@@ -36,41 +35,46 @@ namespace Argon.Editor;
 /// The main class of the Argon editor.
 /// </summary>
 public partial class Editor : Application {
-	private readonly ILogger _logger = LogHelper.Logger;
-	private readonly Settings _settings = new();
+	private readonly ConfigurationService _configuration;
 	private readonly ArgonFileSystem _files;
-	private readonly AssetManager _assets = new();
-	private readonly ModuleWindowViewModel _moduleWindowViewModel;
+	private readonly AssetManager _assets;
+	private readonly ModuleService _modules;
 
+	/// <summary>
+	/// Initializes the editor. Avalonia initialization is done in a separate method.
+	/// </summary>
 	public Editor() {
+		// load user settings
+		_configuration = new ConfigurationService();
+
 		// initialize the file system with the correct temporary folder path
-		_files = new ArgonFileSystem(Path.Combine(_settings.DataFolder, "temp"));
+		_files = new ArgonFileSystem(Path.Combine(_configuration.DataFolder, "temp"));
 
 		// register all necessary loaders with the asset manager
+		_assets = new AssetManager();
 		_assets.RegisterLoader(new ModuleLoader(_files));
+		_assets.RegisterLoader(new CreatureLoader(_files));
 
-		// create the view models
-		_moduleWindowViewModel = new(_settings);
-
-		foreach (string id in _settings.Modules) {
-			_logger.LogInformation("add module: {id}", id);
-			_files.AddModule(Path.Combine(_settings.DataFolder, id));
-			ModuleAsset module = _assets.GetAsset<ModuleAsset>(id);
-			_moduleWindowViewModel.Modules.Add(new ModuleViewModel(module));
-		}
+		// initialize the module service
+		_modules = new ModuleService();
 	}
 
 	public override void Initialize() {
 		AvaloniaXamlLoader.Load(this);
 	}
 
+	/// <summary>
+	/// Don't remove, used by Avalonia.
+	/// </summary>
 	public override void OnFrameworkInitializationCompleted() {
 		// Line below is needed to remove Avalonia data validation. Without this line
 		// you will get duplicate validations from both Avalonia and CommunityToolkit.
 		BindingPlugins.DataValidators.RemoveAt(0);
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-			desktop.MainWindow = new ModuleWindow(_moduleWindowViewModel);
+			desktop.MainWindow = new ModuleWindow() {
+				DataContext = new ModuleWindowViewModel(_configuration, _assets, _files)
+			};
 		}
 
 		base.OnFrameworkInitializationCompleted();

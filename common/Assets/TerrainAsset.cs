@@ -23,4 +23,4 @@ namespace Argon.Common.Assets;
 /// </summary>
 /// <param name="Id"></param>
 /// <param name="Kind"></param>
-internal record TerrainAsset (string Id, string Kind): Asset (Id, Kind);
+internal record TerrainAsset (string Id): Asset (Id);

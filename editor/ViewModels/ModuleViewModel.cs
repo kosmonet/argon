@@ -18,46 +18,37 @@
 
 using Argon.Common;
 using Argon.Common.Assets;
+using Argon.Editor.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Reflection;
 
 namespace Argon.Editor.ViewModels;
 
-public partial class ModuleViewModel(ModuleAsset module) : ObservableObject {
-	private static readonly ILogger _logger = LogHelper.Logger;
+internal partial class ModuleViewModel(ModuleAsset asset, ConfigurationService configuration) : ObservableObject {
+	[ObservableProperty] 
+	private ModuleAsset _module = asset;
+
+	private readonly ILogger _logger = LogHelper.Logger;
+	private readonly ConfigurationService _configuration = configuration;
 
 	/// <summary>
-	/// The id of a module.
+	/// Opens the selected module for editing.
 	/// </summary>
-	[ObservableProperty]
-	private string _id = module.Id;
-
-	/// <summary>
-	/// The title of a module.
-	/// </summary>
-	[ObservableProperty]
-	private string _title = module.Title;
-
-	/// <summary>
-	/// The subtitle of a module.
-	/// </summary>
-	[ObservableProperty]
-	private string _subtitle = module.Subtitle;
-
-	/// <summary>
-	/// The short description of a module.
-	/// </summary>
-	[ObservableProperty]
-	private string? _description = module.Description;
-
-	[RelayCommand]
-	public void DeleteModule() {
-		_logger.LogInformation("delete module: {id}", Id);
-	}
-
 	[RelayCommand]
 	public void OpenModule() {
-		_logger.LogInformation("open module: {id}", Id);
+		_logger.LogInformation("open module: {id}", Module.Id);
+	}
+
+	/// <summary>
+	/// Removes the selected module from the catalog.
+	/// </summary>
+	[RelayCommand]
+	public void DeleteModule() {
+		_logger.LogInformation("delete module: {id}", Module.Id);
+		_configuration.Modules.Remove(Module.Id);
 	}
 }

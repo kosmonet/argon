@@ -17,4 +17,4 @@
  */
 
 namespace Argon.Common.Assets;
-internal record QuestAsset (string Id, string Kind) : Asset (Id, Kind);
+internal record QuestAsset (string Id) : Asset (Id);

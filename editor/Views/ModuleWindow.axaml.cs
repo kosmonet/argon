@@ -17,13 +17,12 @@
  */
 
 using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 
 namespace Argon.Editor.Views;
 
 internal partial class ModuleWindow : Window {
-	internal ModuleWindow(ObservableObject context) {
-		DataContext = context;
+	public ModuleWindow() {
 		InitializeComponent();
 	}
 }

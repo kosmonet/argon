@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -16,14 +16,11 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Text.Json.Serialization;
+using Argon.Common.Assets;
 
-namespace Argon.Common.Assets;
+namespace Argon.Editor.Services;
+internal class ModuleService {
+	internal void deleteModule(ModuleAsset module) {
 
-public record Asset (string Id) {
-	/// <summary>
-	/// The identifier of this <c>Asset</c>. Every <c>Asset</c> has a unique identifier.
-	/// </summary>
-	[JsonPropertyName("id")]
-	public string Id { get; init; } = Guard.NotNullOrEmpty(Id, "Id must not be null or empty.");
+	}
 }

@@ -17,4 +17,4 @@
  */
 
 namespace Argon.Common.Assets;
-internal record ScriptAsset (string Id, string Kind) : Asset (Id, Kind);
+internal record ScriptAsset (string Id) : Asset (Id);

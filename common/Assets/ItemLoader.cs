@@ -43,7 +43,7 @@ public class ItemLoader : IAssetLoader<ItemAsset> {
 			_ => JsonSerializer.Deserialize<ItemAsset>(document),
 		};
 
-		return Guard.NotNull(item, $"The item with id <{id}> was not found");
+		return Guard.NotNull(item, $"The item with id <{id}> was not found.");
 	}
 
 	public void SaveAsset(ItemAsset item) {

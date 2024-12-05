@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ using System.Text.Json.Serialization;
 
 namespace Argon.Common.Assets; 
 
-public record CreatureAsset (string Id, string Kind, string Name, string Image) : Asset (Id, Kind) {
+public record CreatureAsset (string Id, string Name, string Image) : Asset (Id) {
 	/// <summary>
 	/// The name of this <c>Asset</c> as it is used to describe it in the game.
 	/// </summary>

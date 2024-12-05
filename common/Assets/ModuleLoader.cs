@@ -21,6 +21,9 @@ using System.Xml;
 
 namespace Argon.Common.Assets;
 
+/// <summary>
+/// Class that loads module descriptions from an XML file.
+/// </summary>
 public class ModuleLoader : IAssetLoader<ModuleAsset> {
 	private readonly ArgonFileSystem _files;
 
@@ -65,5 +68,24 @@ public class ModuleLoader : IAssetLoader<ModuleAsset> {
 		FileInfo file = _files.SaveFile($"{module.Id}.xml");
 		using var stream = file.Create();
 		document.Save(stream);
+	}
+
+	/// <summary>
+	/// Verifies that the file at the given path is indeed a valid module description.
+	/// </summary>
+	/// <param name="path">The absolute path to the file.</param>
+	/// <returns>True if it is a valid module, false otherwise.</returns>
+	public static Boolean VerifyAsset(FileInfo file) {
+		using var reader = new StreamReader(file.FullName);
+		var document = new XmlDocument();
+		document.LoadXml(reader.ReadToEnd());
+
+		XmlNode? root = document.DocumentElement;
+
+		if (root is not null) {
+			return root.Name.Equals("module");
+		} else {
+			return false;
+		}
 	}
 }

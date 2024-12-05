@@ -24,4 +24,4 @@ namespace Argon.Common.Assets;
 /// <param name="Id"></param>
 /// <param name="Title"></param>
 /// <param name="Subtitle"></param>
-public record ModuleAsset(string Id, string Title, string Subtitle, string Description) : Asset(Id, "module");
+public record ModuleAsset(string Id, string Title, string Subtitle, string Description) : Asset(Id);

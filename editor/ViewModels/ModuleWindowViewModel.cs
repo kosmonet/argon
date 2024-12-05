@@ -16,28 +16,66 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common;
 using Argon.Common.Assets;
-using Argon.Editor.Models;
+using Argon.Common.Files;
+using Argon.Editor.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Argon.Editor.ViewModels;
 
-internal partial class ModuleWindowViewModel : ObservableObject {
+/// <summary>
+/// The view model of the module window that is displayed when starting the application.
+/// </summary>
+public partial class ModuleWindowViewModel : ObservableObject {
 	/// <summary>
 	/// A collection of modules.
 	/// </summary>
-	public ObservableCollection<ModuleViewModel> Modules { get; } = [];
+	internal ObservableCollection<ModuleViewModel> Modules { get; } = [];
 
-	private readonly Settings _settings;
+	private readonly ConfigurationService _settings;
+	private readonly AssetManager _assets;
+	private readonly ArgonFileSystem _files;
+	private static readonly ILogger _logger = LogHelper.Logger;
 
-	internal ModuleWindowViewModel(Settings settings) {
-		_settings = settings;
+	/// <summary>
+	/// Initialize this view model.
+	/// </summary>
+	/// <param name="provider">Container for all services required by this view model.</param>
+	internal ModuleWindowViewModel(ConfigurationService configuration, AssetManager assets, ArgonFileSystem files) {
+		_settings = configuration;
+		_assets = assets;
+		_files = files;
 
-		foreach (string id in settings.Modules) {
-/*			ModuleAsset module = _assets.GetAsset<ModuleAsset>(id);
-			_moduleWindowViewModel.Modules.Add(new ModuleViewModel(module));
-*/
+		// add all active modules to the file system and prepare them for display
+		foreach (string id in _settings.Modules) {
+			_logger.LogInformation("add module: {id}", id);
+			_files.AddModule(Path.Combine(_settings.DataFolder, id));
+			ModuleAsset module = _assets.GetAsset<ModuleAsset>(id);
+			// TODO: have ModuleAssets as the observables
+			Modules.Add(new ModuleViewModel(module, configuration));
 		}
+	}
+
+	/// <summary>
+	/// Adds an existing module in the data folder.
+	/// </summary>
+	[RelayCommand]
+	public void AddModule() {
+		_logger.LogInformation("add existing module");
+	}
+
+	/// <summary>
+	/// Creates a new module in the data folder.
+	/// </summary>
+	[RelayCommand]
+	public void CreateModule() {
+		_logger.LogInformation("create new module");
 	}
 }

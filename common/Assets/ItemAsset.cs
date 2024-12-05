@@ -1,6 +1,6 @@
 ﻿/*
  *	Argon, a roguelike engine.
- *	Copyright (C) 2023 - Maarten Driesen
+ *	Copyright (C) 2023-2024 - Maarten Driesen
  * 
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ using System.Text.Json.Serialization;
 
 namespace Argon.Common.Assets;
 
-public record ItemAsset(string Id, string Kind, string Name, string Image) : Asset (Id, Kind) {
+public record ItemAsset(string Id, string Name, string Image) : Asset (Id) {
 	/// <summary>
 	/// The name of this <c>ItemAsset</c> as displayed in the game.
 	/// </summary>
@@ -33,8 +33,8 @@ public record ItemAsset(string Id, string Kind, string Name, string Image) : Ass
 	[JsonPropertyName("image")]
 	public string Image { get; init; } = Guard.NotNullOrEmpty(Image, "Id must not be null or empty.");
 
-	public record Weapon(string Id, string Kind, string Name, string Image) : ItemAsset(Id, Kind, Name, Image);
-	public record Clothing(string Id, string Kind, string Name, string Image) : ItemAsset(Id, Kind, Name, Image);
-	public record Armor(string Id, string Kind, string Name, string Image) : Clothing(Id, Kind, Name, Image);
-	public record Book(string Id, string Kind, string Name, string Image) : ItemAsset(Id, Kind, Name, Image);
+	public record Weapon(string Id, string Name, string Image) : ItemAsset(Id, Name, Image);
+	public record Clothing(string Id, string Name, string Image) : ItemAsset(Id, Name, Image);
+	public record Armor(string Id, string Name, string Image) : Clothing(Id, Name, Image);
+	public record Book(string Id, string Name, string Image) : ItemAsset(Id, Name, Image);
 }

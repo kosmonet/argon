@@ -24,12 +24,12 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Argon.Editor.Models;
+namespace Argon.Editor.Services;
 
 /// <summary>
-/// Keeps track of user settings.
+/// A service to keep track of user settings.
 /// </summary>
-internal class Settings {
+internal class ConfigurationService {
 	/// <summary>
 	/// A record with the actual configuration that can be saved to a JSON file.
 	/// </summary>
@@ -47,6 +47,7 @@ internal class Settings {
 	/// A set containing the names and paths of all known game modules.
 	/// </summary>
 	internal ISet<string> Modules { get { return _configuration._modules; } }
+
 	/// <summary>
 	/// The path to the data folder containing all game modules.
 	/// </summary>
@@ -57,11 +58,10 @@ internal class Settings {
 	private readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Argon", "editor.conf");
 	private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
-
 	/// <summary>
 	/// Initializes the settings.
 	/// </summary>
-	internal Settings() {
+	internal ConfigurationService() {
 		// check if the settings file exists
 		if (!File.Exists(filePath)) {
 			// if it doesn't, create an empty settings file

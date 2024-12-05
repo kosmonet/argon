@@ -17,4 +17,4 @@
  */
 
 namespace Argon.Common.Assets;
-internal record TextAsset (string Id, string Kind) : Asset (Id, Kind);
+internal record TextAsset (string Id) : Asset (Id);
