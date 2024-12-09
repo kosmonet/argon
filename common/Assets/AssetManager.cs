@@ -27,7 +27,7 @@ namespace Argon.Common.Assets;
 /// </summary>
 public class AssetManager {
 	private readonly Dictionary<Type, Object> _loaders = [];
-	private readonly ObjectCache _cache = MemoryCache.Default;
+	private readonly MemoryCache _cache = MemoryCache.Default;
 	private readonly CacheItemPolicy _policy = new();
 
 	/// <summary>
@@ -65,5 +65,12 @@ public class AssetManager {
 		_cache.Set($"{typeof(T).Name}:{asset.Id}", asset, _policy);
 		IAssetLoader<T> loader = (IAssetLoader<T>)_loaders[typeof(T)];
 		loader.SaveAsset(asset);
+	}
+
+	/// <summary>
+	/// Clears all entries from the internal cache.
+	/// </summary>
+	public void Clear() {
+		_cache.Dispose();
 	}
 }

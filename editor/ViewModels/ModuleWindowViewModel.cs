@@ -22,11 +22,8 @@ using Argon.Common.Files;
 using Argon.Editor.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.ObjectModel;
-using System.IO;
 
 namespace Argon.Editor.ViewModels;
 
@@ -39,43 +36,44 @@ public partial class ModuleWindowViewModel : ObservableObject {
 	/// </summary>
 	internal ObservableCollection<ModuleViewModel> Modules { get; } = [];
 
-	private readonly ConfigurationService _settings;
+	/// <summary>
+	/// The view model for the add module dialog box.
+	/// </summary>
+	internal AddModuleViewModel AddViewModel { get; } = new AddModuleViewModel();
+
+	/// <summary>
+	/// The selected module. May be null if no module has been selected.
+	/// </summary>
+	internal ModuleViewModel? SelectedModule {get; set;}
+
 	private readonly AssetManager _assets;
-	private readonly ArgonFileSystem _files;
 	private static readonly ILogger _logger = LogHelper.Logger;
 
 	/// <summary>
-	/// Initialize this view model.
+	/// Initializes this view model.
 	/// </summary>
-	/// <param name="provider">Container for all services required by this view model.</param>
-	internal ModuleWindowViewModel(ConfigurationService configuration, AssetManager assets, ArgonFileSystem files) {
-		_settings = configuration;
+	/// <param name="configuration"></param>
+	/// <param name="assets"></param>
+	/// <param name="files"></param>
+	internal ModuleWindowViewModel(ModuleService modules, AssetManager assets) {
 		_assets = assets;
-		_files = files;
 
-		// add all active modules to the file system and prepare them for display
-		foreach (string id in _settings.Modules) {
-			_logger.LogInformation("add module: {id}", id);
-			_files.AddModule(Path.Combine(_settings.DataFolder, id));
+		// register all modules in the catalog
+		foreach (string id in modules.Modules) {
 			ModuleAsset module = _assets.GetAsset<ModuleAsset>(id);
-			// TODO: have ModuleAssets as the observables
-			Modules.Add(new ModuleViewModel(module, configuration));
+			Modules.Add(new ModuleViewModel(module));
 		}
 	}
 
 	/// <summary>
-	/// Adds an existing module in the data folder.
+	/// Opens an existing module for editing.
 	/// </summary>
 	[RelayCommand]
-	public void AddModule() {
-		_logger.LogInformation("add existing module");
-	}
-
-	/// <summary>
-	/// Creates a new module in the data folder.
-	/// </summary>
-	[RelayCommand]
-	public void CreateModule() {
-		_logger.LogInformation("create new module");
+	public void OpenModule() {
+		if (SelectedModule != null) {
+			_logger.LogInformation("open module: {id}", SelectedModule.Module.Id);
+		} else {
+			_logger.LogInformation("opening module failed, no module selected");
+		}
 	}
 }

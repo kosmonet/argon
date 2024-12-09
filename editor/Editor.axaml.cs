@@ -25,7 +25,6 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 
@@ -56,7 +55,7 @@ public partial class Editor : Application {
 		_assets.RegisterLoader(new CreatureLoader(_files));
 
 		// initialize the module service
-		_modules = new ModuleService();
+		_modules = new ModuleService(_configuration, _files);
 	}
 
 	public override void Initialize() {
@@ -73,7 +72,7 @@ public partial class Editor : Application {
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 			desktop.MainWindow = new ModuleWindow() {
-				DataContext = new ModuleWindowViewModel(_configuration, _assets, _files)
+				DataContext = new ModuleWindowViewModel(_modules, _assets)
 			};
 		}
 

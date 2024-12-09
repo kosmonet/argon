@@ -35,18 +35,9 @@ internal class ConfigurationService {
 	/// </summary>
 	private record Configuration {
 		[JsonInclude]
-		[JsonPropertyName("modules")]
-		public HashSet<string> _modules = [];
-
-		[JsonInclude]
 		[JsonPropertyName("data")]
 		public string _dataFolder = Path.Combine(AppContext.BaseDirectory, "data");
 	}
-
-	/// <summary>
-	/// A set containing the names and paths of all known game modules.
-	/// </summary>
-	internal ISet<string> Modules { get { return _configuration._modules; } }
 
 	/// <summary>
 	/// The path to the data folder containing all game modules.
@@ -82,7 +73,6 @@ internal class ConfigurationService {
 		}
 
 		_logger.LogInformation("set data folder to {folder}", _configuration._dataFolder);
-
 	}
 
 	/// <summary>

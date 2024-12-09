@@ -2,39 +2,32 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:assets="using:Argon.Common.Assets"
 		xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
 		xmlns:vm="using:Argon.Editor.ViewModels"
 		xmlns:views="using:Argon.Editor.Views"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
 		Width="800" Height="600" WindowStartupLocation="CenterScreen"
 		x:Class="Argon.Editor.Views.ModuleWindow"
-		x:Name="moduleWindow"
 		Title="Argon Editor">
 	<dialogHost:DialogHost>
 		<dialogHost:DialogHost.DialogContent>
-			<StackPanel Orientation="Vertical" Spacing="10" Width="400">
-				<TextBlock TextWrapping="Wrap">This stuff should do something.</TextBlock>
-				<StackPanel Spacing="10" Orientation="Horizontal" HorizontalAlignment="Center">
-					<Button>Something</Button>
-					<Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}">Cancel</Button>
-				</StackPanel>
-			</StackPanel>
+			<views:AddModuleDialog DataContext="{Binding AddViewModel}" />
 		</dialogHost:DialogHost.DialogContent>
 		
 		<DockPanel>
 			<Border DockPanel.Dock="Top" Margin="10 0">
 				<StackPanel Height="50" Spacing="10" Orientation="Horizontal">
-					<Button Command="{Binding CreateModuleCommand}">Create new module</Button>
-					<Button Command="{Binding AddModuleCommand}">Add existing module</Button>
-					<Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}">Do something</Button>
+					<Button Command="{Binding OpenModuleCommand}">Open selected module</Button>
+					<Button Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+							AncestorType=dialogHost:DialogHost}, 
+							Path=OpenDialogCommand}">Create new module</Button>
 				</StackPanel>
 			</Border>
 
-			<ListBox ItemsSource="{Binding Modules}">
+			<ListBox ItemsSource="{Binding Modules}" SelectedItem="{Binding SelectedModule}">
 				<ListBox.DataTemplates>
 					<DataTemplate x:DataType="vm:ModuleViewModel">
-						<views:ModuleView/>
+							<views:ModuleView/>
 					</DataTemplate>
 				</ListBox.DataTemplates>
 			</ListBox>

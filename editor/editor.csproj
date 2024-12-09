@@ -36,4 +36,10 @@
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\AddModuleDialog.axaml.cs">
+      <DependentUpon>AddModuleDialog.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

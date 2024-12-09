@@ -25,4 +25,6 @@ internal partial class ModuleWindow : Window {
 	public ModuleWindow() {
 		InitializeComponent();
 	}
+
+
 }

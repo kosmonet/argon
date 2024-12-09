@@ -26,7 +26,7 @@ public class CreatureLoader : IAssetLoader<CreatureAsset> {
 	private readonly string _kind = "creatures";
 
 	public CreatureLoader(ArgonFileSystem fileSystem) {
-		_files = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+		_files = fileSystem;
 	}
 
 	/// <summary>

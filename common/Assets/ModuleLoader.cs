@@ -28,7 +28,7 @@ public class ModuleLoader : IAssetLoader<ModuleAsset> {
 	private readonly ArgonFileSystem _files;
 
 	public ModuleLoader(ArgonFileSystem fileSystem) { 
-		_files = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+		_files = fileSystem;
 	}
 
 	public ModuleAsset LoadAsset(string id) {
@@ -71,9 +71,9 @@ public class ModuleLoader : IAssetLoader<ModuleAsset> {
 	}
 
 	/// <summary>
-	/// Verifies that the file at the given path is indeed a valid module description.
+	/// Verifies that the given file is indeed a valid module description.
 	/// </summary>
-	/// <param name="path">The absolute path to the file.</param>
+	/// <param name="file">The file to be checked.</param>
 	/// <returns>True if it is a valid module, false otherwise.</returns>
 	public static Boolean VerifyAsset(FileInfo file) {
 		using var reader = new StreamReader(file.FullName);

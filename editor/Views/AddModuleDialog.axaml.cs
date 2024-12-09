@@ -20,7 +20,7 @@ using Avalonia.Controls;
 
 namespace Argon.Editor.Views;
 
-public partial class AddModuleDialog : Window {
+public partial class AddModuleDialog : UserControl {
     public AddModuleDialog() {
         InitializeComponent();
     }

@@ -16,12 +16,10 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Argon.Common.Assets;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Argon.Editor.ViewModels;
-
-internal partial class ModuleViewModel(ModuleAsset asset) : ObservableObject {
-	[ObservableProperty] 
-	private ModuleAsset _module = asset;
+internal partial class AddModuleViewModel : ObservableObject {
+	[ObservableProperty]
+	private string _text = "This should do something";
 }
