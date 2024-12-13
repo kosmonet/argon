@@ -16,12 +16,67 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common;
 using Argon.Common.Assets;
+using Argon.Editor.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
+using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace Argon.Editor.ViewModels;
 
-internal partial class ModuleViewModel(ModuleAsset asset) : ObservableObject {
-	[ObservableProperty] 
-	private ModuleAsset _module = asset;
+/// <summary>
+/// The view model of the module window that is displayed when starting the application.
+/// </summary>
+public partial class ModuleViewModel : ObservableObject {
+	/// <summary>
+	/// A collection of modules.
+	/// </summary>
+	internal ObservableCollection<ModuleAsset> Modules { get; } = [];
+
+	private static readonly ILogger _logger = LogHelper.Logger;
+
+	private readonly AssetManager _assets;
+	private readonly ModuleService _moduleService;
+
+	/// <summary>
+	/// Initializes this view model.
+	/// </summary>
+	/// <param name="modules"></param>
+	/// <param name="assets"></param>
+	internal ModuleViewModel(ModuleService modules, AssetManager assets) {
+		_assets = assets;
+		_moduleService = modules;
+
+		// register all modules in the data folder
+		foreach (string id in _moduleService.Modules) {
+			Modules.Add(_assets.GetAsset<ModuleAsset>(id));
+		}
+	}
+
+	/// <summary>
+	/// Opens an existing module for editing.
+	/// </summary>
+	[RelayCommand]
+	internal void OpenModule(ModuleAsset module) {
+		if (module != null) {
+			_logger.LogInformation("open module: {id}", module.Id);
+		} else {
+			_logger.LogInformation("no module selected to open");
+		}
+	}
+
+	/// <summary>
+	/// Creates a new module and opens it for editing.
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="title"></param>
+	/// <param name="subtitle"></param>
+	/// <param name="description"></param>
+	internal void CreateModule(string id, string title, string subtitle, string description) {
+		ModuleAsset module = _moduleService.CreateModule(id, title, subtitle, description);
+		OpenModule(module);
+	}
 }

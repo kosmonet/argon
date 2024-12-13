@@ -2,19 +2,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Argon.Editor.Editor"
              RequestedThemeVariant="Dark"
-             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia">
-
+             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+			 xmlns:assets="using:Argon.Common.Assets">
 	<Application.Styles>
 		<FluentTheme />
 		<StyleInclude Source="/Styles/Styles.axaml"/>
 		<dialogHostAvalonia:DialogHostStyles />
 	</Application.Styles>
 
-	<Application.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="Views/ModuleView.axaml"/>
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</Application.Resources>
+	<Application.DataTemplates>
+		<DataTemplate DataType="{x:Type assets:ModuleAsset}">
+			<!--Data template to show module information on the start screen.-->
+			<Border BorderBrush="Gray" BorderThickness="1">
+				<DockPanel Margin="5">
+					<Rectangle Margin="5" Fill="Blue" Height="100" Width="100" DockPanel.Dock="Left" />
+					<TextBlock FontSize="18" FontWeight="Bold" DockPanel.Dock="Top" Text="{Binding Title}">Module title</TextBlock>
+					<TextBlock Text="{Binding Description}">Short description of the contents of the module.</TextBlock>
+				</DockPanel>
+			</Border>
+		</DataTemplate>
+	</Application.DataTemplates>
 </Application>

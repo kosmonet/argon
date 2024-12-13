@@ -55,7 +55,7 @@ public partial class Editor : Application {
 		_assets.RegisterLoader(new CreatureLoader(_files));
 
 		// initialize the module service
-		_modules = new ModuleService(_configuration, _files);
+		_modules = new ModuleService(_configuration, _files, _assets);
 	}
 
 	public override void Initialize() {
@@ -72,7 +72,7 @@ public partial class Editor : Application {
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 			desktop.MainWindow = new ModuleWindow() {
-				DataContext = new ModuleWindowViewModel(_modules, _assets)
+				DataContext = new ModuleViewModel(_modules, _assets)
 			};
 		}
 

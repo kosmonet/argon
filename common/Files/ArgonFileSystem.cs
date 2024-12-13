@@ -86,6 +86,17 @@ public class ArgonFileSystem {
 	}
 
 	/// <summary>
+	/// Flushes the contents of the temp folder to the save folder.
+	/// </summary>
+	public void FlushToSave() {
+		if (Directory.Exists(_saveFolder)) {
+			foreach (FileInfo file in new DirectoryInfo(_tempFolder).GetFiles()) {
+				file.MoveTo(Path.Combine(_saveFolder,file.Name));
+			}
+		}
+	}
+
+	/// <summary>
 	/// Loads a file from the given path.
 	/// </summary>
 	/// <param name="path">The relative path to the requested file.</param>
@@ -142,10 +153,20 @@ public class ArgonFileSystem {
 		throw new FileNotFoundException(path);
 	}
 
+	/// <summary>
+	/// Creates a FileInfo object that can be used to save data to the given path.
+	/// </summary>
+	/// <param name="path"></param>
+	/// <returns></returns>
 	internal FileInfo SaveFile(params string[] path) {
 		return SaveFile(Path.Combine(path));
 	}
 
+	/// <summary>
+	/// Creates a FileInfo object that can be used to save data to the given path.
+	/// </summary>
+	/// <param name="path"></param>
+	/// <returns></returns>
 	internal FileInfo SaveFile(string path) {
 		FileInfo file = new(Path.Combine(_tempFolder, path));
 		ArgumentNullException.ThrowIfNull(file.DirectoryName);
@@ -153,6 +174,10 @@ public class ArgonFileSystem {
 		return file;
 	}
 
+	/// <summary>
+	/// Clears all contents in a folder.
+	/// </summary>
+	/// <param name="path"></param>
 	private static void ClearFolder(string path) {
 		foreach (string file in Directory.EnumerateFiles(path)) {
 			File.Delete(file);
@@ -163,6 +188,11 @@ public class ArgonFileSystem {
 		}
 	}
 
+	/// <summary>
+	/// Checks wether a file is a zip file.
+	/// </summary>
+	/// <param name="path"></param>
+	/// <returns></returns>
 	private static bool IsZipFile(string path) {
 		try {
 			ZipFile.OpenRead(path);

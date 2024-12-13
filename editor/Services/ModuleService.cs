@@ -23,6 +23,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System;
+using System.Diagnostics;
 
 namespace Argon.Editor.Services;
 
@@ -33,25 +35,56 @@ internal class ModuleService {
 	/// <summary>
 	/// A set containing the names and paths of all known game modules.
 	/// </summary>
-	internal ISet<string> Modules { get; private set; } = new HashSet<string>();
+	internal ISet<string> Modules { get; } = new HashSet<string>();
 
-	private ArgonFileSystem _files;
-	private ILogger _logger = LogHelper.Logger;
+	private readonly ArgonFileSystem _files;
+	private readonly ILogger _logger = LogHelper.Logger;
+	private readonly ConfigurationService _configuration;
+	private readonly AssetManager _assets;
 
-	internal ModuleService(ConfigurationService configuration, ArgonFileSystem files) {
+	internal ModuleService(ConfigurationService configuration, ArgonFileSystem files, AssetManager assets) {
 		_files = files;
+		_configuration = configuration;
+		_assets = assets;
 
 		// load all known modules in the data folder
 		LoadModules(configuration.DataFolder);
 	}
 
+	/// <summary>
+	/// Creates a new module in the data folder.
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="title"></param>
+	/// <param name="subtitle"></param>
+	/// <param name="description"></param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentException"></exception>
+	internal ModuleAsset CreateModule(string id, string title, string subtitle, string description) {
+		_logger.LogInformation("create module {id}", id);
+		string path = Path.Combine(_configuration.DataFolder,id);
+
+		// check if there is already a folder with the same name as the module id
+		if (!Directory.Exists(path)) {
+			Directory.CreateDirectory(path);
+			_files.SetSaveFolder(path);
+			ModuleAsset module = new(id, title, subtitle, description);
+			_assets.AddAsset(module);
+			_files.FlushToSave();
+			return module;
+		} else {
+			throw new ArgumentException("A folder with the name <{id}> already exists.", id);
+		}
+	}
+
 	private void LoadModules(string path) {
 		foreach (string folder in Directory.GetDirectories(path)) {
 			string name = Path.GetFileName(folder);
-			if (Directory.GetFiles(folder).Contains(Path.Combine(folder, $"{name}.xml"))) {
-				FileInfo module = new FileInfo(Path.Combine(folder, $"{name}.xml"));
+			string file = Path.Combine(folder, $"{name}.xml");
+			if (Directory.GetFiles(folder).Contains(file)) {
+				FileInfo module = new(file);
 				if (ModuleLoader.VerifyAsset(module)) {
-					_logger.LogInformation($"module folder found: {name}");
+					_logger.LogInformation("module folder found: {name}", name);
 					_files.AddModule(folder);
 					Modules.Add(name);
 				}

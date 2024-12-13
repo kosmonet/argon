@@ -62,7 +62,9 @@ public class ModuleLoader : IAssetLoader<ModuleAsset> {
 		subtitle.InnerText = module.Subtitle;
 		root.AppendChild(subtitle);
 		XmlElement description = document.CreateElement("description");
-		subtitle.InnerText = module.Description;
+//		XmlCDataSection cdataSection = document.CreateCDataSection(module.Description);
+//		description.AppendChild(cdataSection);
+		description.InnerText = module.Description;
 		root.AppendChild(description);
 
 		FileInfo file = _files.SaveFile($"{module.Id}.xml");

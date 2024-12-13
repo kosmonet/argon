@@ -16,8 +16,10 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Editor.ViewModels;
 using Avalonia.Controls;
-using System;
+using Avalonia.Interactivity;
+using DialogHostAvalonia;
 
 namespace Argon.Editor.Views;
 
@@ -26,5 +28,11 @@ internal partial class ModuleWindow : Window {
 		InitializeComponent();
 	}
 
+	public void OnCreateClicked(object? sender, RoutedEventArgs e) {
+		DialogHost.IsOpen = false;
 
+		if (DataContext is ModuleViewModel model) {
+			model.CreateModule(Id.Text, Title.Text, Subtitle.Text, Description.Text);
+		}
+	}
 }

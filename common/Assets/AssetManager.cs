@@ -51,13 +51,13 @@ public class AssetManager {
 		} else {
 			IAssetLoader<T> loader = (IAssetLoader<T>)_loaders[typeof(T)];
 			T asset = loader.LoadAsset(id);
-			AddAsset(asset);
+			_cache.Set($"{typeof(T).Name}:{asset.Id}", asset, _policy);
 			return asset;
 		}
 	}
 
 	/// <summary>
-	/// Adds an asset.
+	/// Adds an asset and saves it to the temp folder.
 	/// </summary>
 	/// <typeparam name="T">The type of the asset.</typeparam>
 	/// <param name="asset">The asset to be added.</param>
