@@ -1,0 +1,60 @@
+<Page
+	x:Class="Argon.Client.Presentation.StartPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Argon.Client.Presentation"
+	xmlns:models="using:Argon.Client.Models"
+	xmlns:uen="using:Uno.Extensions.Navigation.UI"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+	<RelativePanel>
+		<TextBlock x:Name="TopLeft" FontSize="75" Margin="0 -25">🙧</TextBlock>
+		<TextBlock x:Name="TopRight" FontSize="75" Margin="0 -25"
+				RelativePanel.AlignRightWithPanel="True">🙥</TextBlock>
+
+		<TextBlock x:Name="TitleRect" MinHeight="100" MinWidth="100" Margin="0,5,0,0"
+				FontSize="150" Text="{Binding Title}"
+				RelativePanel.AlignHorizontalCenterWithPanel="True"
+				RelativePanel.Below="TopLeft" />
+		<TextBlock x:Name="SubtitleRect" MinHeight="100" MinWidth="100" Margin="0,5,0,0" 
+				FontSize="75" Text="{Binding Subtitle}"
+				RelativePanel.AlignHorizontalCenterWithPanel="True"
+				RelativePanel.Below="TitleRect" />
+
+		<Grid x:Name="Grid" Width="200" RelativePanel.Below="SubtitleRect"
+				RelativePanel.AlignHorizontalCenterWithPanel="True"
+				RowSpacing="20" Margin="50">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch"
+					uen:Navigation.Request="Main"
+					FontSize="25">New game</Button>
+			<Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch"
+					uen:Navigation.Request="Main"
+					FontSize="25">Load game</Button>
+			<Button Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch"
+					uen:Navigation.Request="Main"
+					FontSize="25">Options</Button>
+			<Button Grid.Column="0" Grid.Row="3" HorizontalAlignment="Stretch"
+					uen:Navigation.Request="Main"
+					FontSize="25">Quit</Button>
+		</Grid>
+
+		<TextBlock x:Name="BottomLeft" FontSize="75" Margin="0 -20"
+				RelativePanel.AlignBottomWithPanel="True" 
+				RelativePanel.AlignLeftWithPanel="True">🙦</TextBlock>
+		<TextBlock x:Name="Version" Margin="10"
+				RelativePanel.AlignBottomWithPanel="True" 
+				RelativePanel.AlignHorizontalCenterWithPanel="True">version 0.0.0</TextBlock>
+		<TextBlock x:Name="BottomRight" FontSize="75" Margin="0 -20"
+				RelativePanel.AlignBottomWithPanel="True" 
+				RelativePanel.AlignRightWithPanel="True">🙤</TextBlock>
+	</RelativePanel>
+</Page>

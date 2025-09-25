@@ -1,0 +1,6 @@
+{
+    "dotnet.preferCSharpExtension": false,
+    "unoplatform.ignoreCheck": true,
+    "csharp.format.enable": false,
+    "omnisharp.useEditorFormattingSettings": false
+}
