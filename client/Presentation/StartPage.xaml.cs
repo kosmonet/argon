@@ -16,10 +16,39 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Microsoft.UI.Xaml.Input;
+using Windows.System;
+
 namespace Argon.Client.Presentation;
 
 public sealed partial class StartPage : Page {
     public StartPage() {
         InitializeComponent();
     }
+
+    /// <summary>
+    /// Quits the client.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Quit(object sender, RoutedEventArgs e) {
+        Environment.Exit(0);
+    }
+
+    // protected override void OnNavigatedTo(NavigationEventArgs e) {
+    //     // Set the input focus to ensure that keyboard events are raised.
+    //     Loaded += delegate { Focus(FocusState.Programmatic); };
+    // }
+
+    /// <summary>
+    /// Handles the keyboard shortcuts on the start page.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void KeyPressed(object sender, KeyRoutedEventArgs e) {
+        switch (e.Key) {
+            case VirtualKey.Q: Environment.Exit(0); break;
+        }
+    }
 }
+

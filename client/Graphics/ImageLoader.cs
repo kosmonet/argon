@@ -16,7 +16,6 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Microsoft.UI.Xaml.Media.Imaging;
 using SkiaSharp;
 
 namespace Argon.Client.Graphics;
@@ -27,24 +26,18 @@ internal class ImageLoader {
 
     internal ImageLoader () {
         // load the height map from an 8-bit grayscale bitmap image
-        byte[] heightBuffer = File.ReadAllBytes("Assets/Images/height.bmp");
-        using(Stream file = new MemoryStream(heightBuffer)) {
-            SKBitmap bitmap = SKBitmap.Decode(file);
-            for(int x = 0; x < bitmap.Width; x++) {
-                for(int y = 0; y < bitmap.Height; y++) {
-                    heightMap[x,y] = bitmap.GetPixel(x, y).Red;
-                }
+        SKBitmap heightBuffer = SKBitmap.Decode("Assets/Images/height.bmp");
+        for (int x = 0; x < heightBuffer.Width; x++) {
+            for (int y = 0; y < heightBuffer.Height; y++) {
+                heightMap[x, y] = (byte)(heightBuffer.GetPixel(x, y).Red/2);
             }
         }
 
         // load the terrain map from an 8-bit grayscale bitmap image
-        byte[] terrainBuffer = File.ReadAllBytes("Assets/Images/diffuse.bmp");
-        using(Stream file = new MemoryStream(terrainBuffer)) {
-            SKBitmap bitmap = SKBitmap.Decode(file);
-            for(int x = 0; x < bitmap.Width; x++) {
-                for(int y = 0; y < bitmap.Height; y++) {
-                    terrainMap[x,y] = bitmap.GetPixel(x, y).Red;
-                }
+        SKBitmap terrainBuffer = SKBitmap.Decode("Assets/Images/diffuse.bmp");
+        for (int x = 0; x < terrainBuffer.Width; x++) {
+            for (int y = 0; y < terrainBuffer.Height; y++) {
+                terrainMap[x, y] = terrainBuffer.GetPixel(x, y).Red;
             }
         }
     }

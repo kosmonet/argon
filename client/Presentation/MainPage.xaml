@@ -2,11 +2,22 @@
 	x:Class="Argon.Client.Presentation.MainPage"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:local="using:Argon.Client.Presentation"
-	xmlns:models="using:Argon.Client.Models"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-	<Page.DataContext>
-		<models:MainViewModel />
-	</Page.DataContext>
-	<SkiaGameCanvas />
+
+	<!-- for some reason, it's impossible to get keyboard focus if there's 
+	only a SkiaGameCanvas added to the page -->
+	<Grid x:Name="Grid">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="0" />
+		</Grid.RowDefinitions>
+
+		<!-- and compiling fails if grid position is added to the SkiaGameCanvas,
+		so we put it in the first grid cell -->
+		<SkiaGameCanvas />
+		<Button Grid.Column="0" Grid.Row="1" />
+	</Grid>
 </Page>

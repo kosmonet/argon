@@ -1,4 +1,4 @@
-﻿/*
+/*
  *	Argon, a roguelike engine.
  *	Copyright (C) 2025 - Maarten Driesen
  * 
@@ -16,42 +16,28 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common;
 using Microsoft.UI.Xaml.Input;
+using Windows.System;
 
 namespace Argon.Client.Presentation;
 
-public sealed partial class MainPage : Page {
-    public MainPage() {
+public sealed partial class NewPage : Page {
+    public NewPage() {
         InitializeComponent();
-
-        // unfortunately, no KeyPressed event, only KeyDown
-        KeyDown += OnKeyDown;
-        LostFocus += OnFocusLost;
     }
 
     /// <summary>
-    /// Handles key presses.
+    /// Handles the keyboard shortcuts on the new game page.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnKeyDown(object sender, KeyRoutedEventArgs e) {
-        Console.Out.WriteLine($"KeyDown: {e.Key}");
-    }
+    private void KeyPressed(object sender, KeyRoutedEventArgs e) {
+        INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
 
-    /// <summary>
-    /// Requests focus when the main page is navigated to.
-    /// </summary>
-    /// <param name="e"></param>
-    protected override void OnNavigatedTo(NavigationEventArgs e) {
-        Loaded += delegate { Focus(FocusState.Programmatic); };
-    }
-
-    /// <summary>
-    /// Requests focus when focus is lost.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void OnFocusLost(object sender, RoutedEventArgs e) {
-        Focus(FocusState.Programmatic);
+        switch (e.Key) {
+            case VirtualKey.Enter: navigator.NavigateViewAsync<MainPage>(sender); break;
+            case VirtualKey.Escape: navigator.GoBack(sender); break;
+        }
     }
 }

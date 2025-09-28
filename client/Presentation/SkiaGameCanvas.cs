@@ -58,7 +58,7 @@ internal class SkiaGameCanvas : SKCanvasElement {
         DrawText(terrainMap, heightMap, canvas, width, height, center);
     }
     
-    private void DrawText(byte[,] terrainMap, byte[,] heightMap, SKCanvas canvas, int width, int height, int center) {
+     private void DrawText(byte[,] terrainMap, byte[,] heightMap, SKCanvas canvas, int width, int height, int center) {
         SKTextAlign align = SKTextAlign.Center;
         SKFont font = new(SKTypeface.Default, 9*tileSize/16, 1, 0);
 

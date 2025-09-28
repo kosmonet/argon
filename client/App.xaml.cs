@@ -23,6 +23,8 @@ using System.Text.Json;
 using Argon.Client.Models;
 using Argon.Client.Presentation;
 using Microsoft.Extensions.Hosting;
+using Uno.Extensions.Reactive.Bindings;
+using Windows.Graphics;
 
 namespace Argon.Client;
 
@@ -30,9 +32,6 @@ namespace Argon.Client;
 /// 
 /// </summary>
 internal partial class App : Application {
-    protected Window? MainWindow { get; private set; }
-    protected IHost? Host { get; private set; }
-
     /// <summary>
     /// Initializes the singleton application object. This is the first line of 
     /// authored code executed, and as such is the logical equivalent of main() 
@@ -49,17 +48,16 @@ internal partial class App : Application {
     protected async override void OnLaunched(LaunchActivatedEventArgs args) {
         IApplicationBuilder builder = this.CreateBuilder(args)
         	.UseToolkitNavigation()
-            // ReactiveViewModelMappings is hier nodig om via RegisterRoutes 
-            // de Models en Views automatisch te verbinden
-            .Configure(host => host.UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes));
+            .Configure(hostBuilder => hostBuilder.UseLocalization()
+                // ModelMappings nodig om Models en Views automatisch te verbinden
+                .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes));
         
-        MainWindow = builder.Window;
-        MainWindow.AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1920, Height = 1080 });
+        Window mainWindow = builder.Window;
+        mainWindow.AppWindow.Resize(new SizeInt32 { Width = 1920, Height = 1080 });
+        IHost host = await builder.NavigateAsync<Shell>();
+        // await host.RunAsync();
 
-        // Nog een licht mysterie waarom dit alleen werkt met Shell
-        Host = await builder.NavigateAsync<Shell>();
-
-        RunTcp();
+        RunTcp();   // TODO: naar host.RunAsync() verplaatsen
     }
 
     /// <summary>
@@ -69,10 +67,13 @@ internal partial class App : Application {
     /// <param name="routes"></param>
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes) {
         views.Register(
-            // Waarom ShellModel?
+            // Why is the Shell special?
             new ViewMap(ViewModel: typeof(ShellModel)),
             new ViewMap<StartPage, StartModel>(),
-            new ViewMap<MainPage, MainModel>()
+            new ViewMap<MainPage, MainModel>(),
+            new ViewMap<NewPage, NewModel>(),
+            new ViewMap<LoadPage, LoadModel>(),
+            new ViewMap<OptionPage, OptionModel>()
         );
 
         routes.Register(
@@ -81,8 +82,9 @@ internal partial class App : Application {
                 [
                     new ("Start", View: views.FindByView<StartPage>(), IsDefault:true),
                     new ("Main", View: views.FindByView<MainPage>()),
-                    // new ("Main", View: views.FindByView<LoadPage>()),
-                    // new ("Main", View: views.FindByView<OptionPage>())
+                    new ("New", View: views.FindByView<NewPage>()),
+                    new ("Load", View: views.FindByView<LoadPage>()),
+                    new ("Options", View: views.FindByView<OptionPage>())
                 ]
             )
         );

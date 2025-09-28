@@ -16,5 +16,8 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// leave this here to automatically generate the ViewModels
-[assembly: Uno.Extensions.Reactive.Config.BindableGenerationTool(3)]
+namespace Argon.Client.Models;
+
+internal partial record LoadModel {
+
+}
