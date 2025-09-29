@@ -32,10 +32,10 @@ public sealed partial class OptionPage : Page {
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void KeyPressed(object sender, KeyRoutedEventArgs e) {
+    private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
         INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
 
-        switch (e.Key) {
+        switch (args.Key) {
             case VirtualKey.Enter: 
                 Console.Out.WriteLine("saving configuration");
                 navigator.GoBack(sender); break;

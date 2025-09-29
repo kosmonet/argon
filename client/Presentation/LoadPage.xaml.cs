@@ -31,11 +31,11 @@ public sealed partial class LoadPage : Page {
     /// Handles the keyboard shortcuts on the load page.
     /// </summary>
     /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void KeyPressed(object sender, KeyRoutedEventArgs e) {
+    /// <param name="args"></param>
+    private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
         INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
 
-        switch (e.Key) {
+        switch (args.Key) {
             case VirtualKey.Enter: navigator.NavigateViewAsync<MainPage>(sender); break;
             case VirtualKey.Escape: navigator.GoBack(sender); break;
         }

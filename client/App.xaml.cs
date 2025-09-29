@@ -23,7 +23,6 @@ using System.Text.Json;
 using Argon.Client.Models;
 using Argon.Client.Presentation;
 using Microsoft.Extensions.Hosting;
-using Uno.Extensions.Reactive.Bindings;
 using Windows.Graphics;
 
 namespace Argon.Client;
@@ -54,6 +53,7 @@ internal partial class App : Application {
         
         Window mainWindow = builder.Window;
         mainWindow.AppWindow.Resize(new SizeInt32 { Width = 1920, Height = 1080 });
+        // mainWindow.SetWindowIcon();
         IHost host = await builder.NavigateAsync<Shell>();
         // await host.RunAsync();
 

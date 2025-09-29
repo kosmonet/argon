@@ -23,9 +23,6 @@ namespace Argon.Client.Presentation;
 public sealed partial class MainPage : Page {
     public MainPage() {
         InitializeComponent();
-
-        // unfortunately, no KeyPressed event, only KeyDown
-        KeyDown += OnKeyDown;
         LostFocus += OnFocusLost;
     }
 
@@ -33,25 +30,17 @@ public sealed partial class MainPage : Page {
     /// Handles key presses.
     /// </summary>
     /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void OnKeyDown(object sender, KeyRoutedEventArgs e) {
-        Console.Out.WriteLine($"KeyDown: {e.Key}");
-    }
-
-    /// <summary>
-    /// Requests focus when the main page is navigated to.
-    /// </summary>
-    /// <param name="e"></param>
-    protected override void OnNavigatedTo(NavigationEventArgs e) {
-        Loaded += delegate { Focus(FocusState.Programmatic); };
+    /// <param name="args"></param>
+    private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
+        // Console.Out.WriteLine($"KeyDown: {args.Key}");
     }
 
     /// <summary>
     /// Requests focus when focus is lost.
     /// </summary>
     /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void OnFocusLost(object sender, RoutedEventArgs e) {
+    /// <param name="args"></param>
+    private void OnFocusLost(object sender, RoutedEventArgs args) {
         Focus(FocusState.Programmatic);
     }
 }

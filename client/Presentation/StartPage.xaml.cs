@@ -35,18 +35,13 @@ public sealed partial class StartPage : Page {
         Environment.Exit(0);
     }
 
-    // protected override void OnNavigatedTo(NavigationEventArgs e) {
-    //     // Set the input focus to ensure that keyboard events are raised.
-    //     Loaded += delegate { Focus(FocusState.Programmatic); };
-    // }
-
     /// <summary>
     /// Handles the keyboard shortcuts on the start page.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void KeyPressed(object sender, KeyRoutedEventArgs e) {
-        switch (e.Key) {
+    private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
+        switch (args.Key) {
             case VirtualKey.Q: Environment.Exit(0); break;
         }
     }
