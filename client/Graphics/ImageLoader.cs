@@ -29,7 +29,7 @@ internal class ImageLoader {
         SKBitmap heightBuffer = SKBitmap.Decode("Assets/Images/height.bmp");
         for (int x = 0; x < heightBuffer.Width; x++) {
             for (int y = 0; y < heightBuffer.Height; y++) {
-                heightMap[x, y] = (byte)(heightBuffer.GetPixel(x, y).Red/2);
+                heightMap[x, y] = (byte)(255 - heightBuffer.GetPixel(x, y).Red/2);
             }
         }
 

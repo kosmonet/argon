@@ -16,10 +16,11 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.Json;
+using Argon.Common;
+using Argon.Server.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Argon.Server;
 
@@ -27,44 +28,31 @@ namespace Argon.Server;
 /// The main class for the server. 
 /// </summary>
 internal class Server {
+    private static readonly ILogger _logger = LogHelper.Logger;
+
+    private readonly ConfigurationService _config = new();
+    // private readonly NetworkService _network = new();
+
     /// <summary>
-    /// Main method.
+    /// Main method of the Server.
     /// </summary>
     /// <param name="args">The command line parameters.</param>
-    public static async Task Main(string[] args) {
+    public static void Main(string[] args) {
+        _logger.LogInformation("starting server");
+
+        IHostBuilder builder = Host.CreateDefaultBuilder(args);
+        
+        builder.ConfigureServices(services => {
+            services.AddHostedService<NetworkService>();
+        });
+
+        IHost host = builder.Build();
+        host.RunAsync();
+
         Server server = new Server();
-        await server.RunTcp();
     }
 
     private Server() {
-        Console.WriteLine("Starting server...");
-    }
 
-    private async Task RunTcp() {
-        User user = new User{Name = "Jef", Username = "JJ", Email = "Jef@JJ.com"};
-        IPAddress ipAddress = new([127,0,0,1]);
-        var ipEndPoint = new IPEndPoint(ipAddress, 11111);
-        TcpListener listener = new(ipEndPoint);
-
-        try {    
-            listener.Start();
-
-            using TcpClient handler = await listener.AcceptTcpClientAsync();
-            await using NetworkStream stream = handler.GetStream();
-
-            string message = JsonSerializer.Serialize(user);
-            var messageBytes = Encoding.UTF8.GetBytes(message);
-
-            await stream.WriteAsync(messageBytes);
-            Console.WriteLine($"Sent message: {message}");
-        } finally {
-            listener.Stop();
-        }
-    }
-
-    private record User {
-        public string? Name { get; set; }
-        public string? Username { get; set; }
-        public string? Email { get; set; }
     }
 }

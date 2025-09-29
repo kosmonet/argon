@@ -67,7 +67,7 @@ internal partial class App : Application {
     /// <param name="routes"></param>
     private static void RegisterRoutes(IViewRegistry views, IRouteRegistry routes) {
         views.Register(
-            // Why is the Shell special?
+            // why is the Shell special?
             new ViewMap(ViewModel: typeof(ShellModel)),
             new ViewMap<StartPage, StartModel>(),
             new ViewMap<MainPage, MainModel>(),
