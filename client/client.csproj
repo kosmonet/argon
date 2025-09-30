@@ -41,7 +41,6 @@
     <ProjectReference Include="../common/common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Net/" />
     <Folder Include="Strings/nl/" />
   </ItemGroup>
 </Project>

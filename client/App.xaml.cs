@@ -22,6 +22,8 @@ using System.Text;
 using System.Text.Json;
 using Argon.Client.Models;
 using Argon.Client.Presentation;
+using Argon.Client.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Windows.Graphics;
 
@@ -45,15 +47,23 @@ internal partial class App : Application {
     /// </summary>
     /// <param name="args"></param>
     protected async override void OnLaunched(LaunchActivatedEventArgs args) {
-        IApplicationBuilder builder = this.CreateBuilder(args)
-        	.UseToolkitNavigation()
+        IApplicationBuilder builder = this.CreateBuilder(args);
+
+        // IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
+        // hostBuilder.UseLocalization()
+        //     .ConfigureServices(services => {
+        //         services.AddHostedService<NetworkService>();
+        //     });
+
+        builder.UseToolkitNavigation()
             .Configure(hostBuilder => hostBuilder.UseLocalization()
                 // ModelMappings nodig om Models en Views automatisch te verbinden
-                .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes));
-        
+                .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
+            );
+
         Window mainWindow = builder.Window;
         mainWindow.AppWindow.Resize(new SizeInt32 { Width = 1920, Height = 1080 });
-        // mainWindow.SetWindowIcon();
+
         IHost host = await builder.NavigateAsync<Shell>();
         // await host.RunAsync();
 
@@ -92,7 +102,7 @@ internal partial class App : Application {
 
     private static async void RunTcp() {
         IPAddress ipAddress = new([127,0,0,1]);
-        var ipEndPoint = new IPEndPoint(ipAddress, 11111);
+        var ipEndPoint = new IPEndPoint(ipAddress, 58008);
 
         using TcpClient client = new();
         await client.ConnectAsync(ipEndPoint);

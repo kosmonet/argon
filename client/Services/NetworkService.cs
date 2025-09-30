@@ -1,4 +1,4 @@
-﻿/*
+/*
  *	Argon, a roguelike engine.
  *	Copyright (C) 2025 - Maarten Driesen
  * 
@@ -16,17 +16,12 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Argon.Client.Presentation;
+using Microsoft.Extensions.Hosting;
 
-public sealed partial class Shell : UserControl {
-    /// <summary>
-    /// Initializes this component and sets the application theme.
-    /// </summary>
-    public Shell() {
-        this.InitializeComponent();
+namespace Argon.Client.Services;
 
-        // only way that works for setting the dark theme
-        IThemeService themeService = this.GetThemeService();
-        themeService.SetThemeAsync(AppTheme.Dark);
+public class NetworkService : BackgroundService {
+    protected override Task ExecuteAsync(CancellationToken token) {
+        throw new NotImplementedException();
     }
 }

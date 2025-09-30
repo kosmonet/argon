@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../design"
+		}
+	],
+	"settings": {
+		"dotnet.preferCSharpExtension": false,
+		"csharp.format.enable": false,
+		"omnisharp.useEditorFormattingSettings": false
+	}
+}

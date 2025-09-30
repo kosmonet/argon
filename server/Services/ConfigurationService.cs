@@ -23,6 +23,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Argon.Server.Services;
 
+/// <summary>
+/// A service to handle all server configuration.
+/// </summary>
 internal class ConfigurationService {
     /// <summary>
     /// Record to keep track of all server configuration.

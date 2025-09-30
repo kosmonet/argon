@@ -31,14 +31,14 @@ internal class Server {
     private static readonly ILogger _logger = LogHelper.Logger;
 
     private readonly ConfigurationService _config = new();
-    // private readonly NetworkService _network = new();
 
     /// <summary>
     /// Main method of the Server.
     /// </summary>
     /// <param name="args">The command line parameters.</param>
-    public static void Main(string[] args) {
-        _logger.LogInformation("starting server");
+    public static async Task Main(string[] args) {
+        _logger.LogInformation("starting server");        
+        Server server = new();
 
         IHostBuilder builder = Host.CreateDefaultBuilder(args);
         
@@ -47,12 +47,6 @@ internal class Server {
         });
 
         IHost host = builder.Build();
-        host.RunAsync();
-
-        Server server = new Server();
-    }
-
-    private Server() {
-
+        await host.RunAsync();
     }
 }

@@ -20,59 +20,32 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using Argon.Common;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Argon.Server.Services;
 
-internal class NetworkService : IHostedService {
-    private readonly IHostApplicationLifetime _appLifetime;
+internal class NetworkService : BackgroundService {
+    private static readonly ILogger _logger = LogHelper.Logger;
 
-    public NetworkService(IHostApplicationLifetime appLifetime) {
-        _appLifetime = appLifetime;
-    }
+    protected override async Task ExecuteAsync(CancellationToken token) {
+        User user = new() { Name = "Jef", Username = "JJ", Email = "Jef@JJ.com"};
+        string message = JsonSerializer.Serialize(user);
+        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
 
-    public Task StartAsync(CancellationToken cancellationToken) {
-        _appLifetime.ApplicationStarted.Register(() => {
-            Task.Run(async () => {
-                try {
-                    Console.Out.WriteLine("starting TCP");
-                    await RunTcp();
-                } catch (Exception ex) {
-                    Console.Out.WriteLine("oeps");
-                } finally {
-                    // Stop the application once the work is done
-                    _appLifetime.StopApplication();
-                }
-            });
-        });
-
-        return Task.CompletedTask;
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal static async Task RunTcp() {
-        User user = new User{Name = "Jef", Username = "JJ", Email = "Jef@JJ.com"};
         IPAddress ipAddress = new([127,0,0,1]);
-        var ipEndPoint = new IPEndPoint(ipAddress, 11111);
+        IPEndPoint ipEndPoint = new(ipAddress, 58008);
         TcpListener listener = new(ipEndPoint);
+        listener.Start();
+        
+        while (!token.IsCancellationRequested) {
+            TcpClient client = await listener.AcceptTcpClientAsync(token);
+            _logger.LogInformation("new client connected");
 
-        try {    
-            listener.Start();
-
-            using TcpClient handler = await listener.AcceptTcpClientAsync();
-            await using NetworkStream stream = handler.GetStream();
-
-            string message = JsonSerializer.Serialize(user);
-            var messageBytes = Encoding.UTF8.GetBytes(message);
-
-            await stream.WriteAsync(messageBytes);
-            Console.WriteLine($"Sent message: {message}");
-        } finally {
-            listener.Stop();
+            using NetworkStream stream = client.GetStream();
+            await stream.WriteAsync(messageBytes, token);
+            _logger.LogInformation("sent message: '{message}'", message);
         }
     }
 
