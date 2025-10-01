@@ -6,30 +6,23 @@
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
-    <ApplicationTitle>editor</ApplicationTitle>
+    <ApplicationTitle>Argon editor</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.editor</ApplicationId>
+    <ApplicationId>argon.editor</ApplicationId>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <!-- Package Publisher -->
-    <ApplicationPublisher>editor</ApplicationPublisher>
+    <ApplicationPublisher>Argon</ApplicationPublisher>
     <!-- Package Description -->
-    <Description>editor powered by Uno Platform.</Description>
+    <Description>The editor for the Argon engine.</Description>
 
     <UnoFeatures>
-      Hosting;
-      Toolkit;
-      Logging;
-      MVUX;
-      Configuration;
-      Localization;
-      Navigation;
-      ThemeService;
       SkiaRenderer;
     </UnoFeatures>
 
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>Argon.Client</RootNamespace>
   </PropertyGroup>
 </Project>

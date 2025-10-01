@@ -2,8 +2,7 @@
 	x:Class="Argon.Client.Presentation.StartPage"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:uen="using:Uno.Extensions.Navigation.UI"
-	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	xmlns:uen="using:Uno.Extensions.Navigation.UI">
 
 	<RelativePanel>
 		<TextBlock x:Name="TopLeft" FontSize="75" Margin="0 -25">🙧</TextBlock>
@@ -47,6 +46,9 @@
 		<TextBlock x:Name="BottomLeft" FontSize="75" Margin="0 -20"
 				RelativePanel.AlignBottomWithPanel="True" 
 				RelativePanel.AlignLeftWithPanel="True">🙦</TextBlock>
+		<HyperlinkButton x:Name="Link" NavigateUri="https://github.com/kosmonet/argon"
+				RelativePanel.Above="Version"
+				RelativePanel.AlignHorizontalCenterWithPanel="True">GitHub</HyperlinkButton>
 		<TextBlock x:Name="Version" Margin="10"
 				RelativePanel.AlignBottomWithPanel="True" 
 				RelativePanel.AlignHorizontalCenterWithPanel="True">version 0.0.0</TextBlock>

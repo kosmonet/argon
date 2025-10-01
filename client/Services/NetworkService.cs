@@ -16,12 +16,33 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Hosting;
 
 namespace Argon.Client.Services;
 
 public class NetworkService : BackgroundService {
-    protected override Task ExecuteAsync(CancellationToken token) {
-        throw new NotImplementedException();
+    protected override async Task ExecuteAsync(CancellationToken token) {
+        Console.Out.WriteLine("starting TCP");
+        IPAddress ipAddress = new([127,0,0,1]);
+        IPEndPoint ipEndPoint = new(ipAddress, 58008);
+
+        using TcpClient client = new();
+        await client.ConnectAsync(ipEndPoint);
+        using NetworkStream stream = client.GetStream();
+
+        // ReadBytes() komt uit Uno extensions
+        string message = Encoding.UTF8.GetString(stream.ReadBytes());
+        User? user = JsonSerializer.Deserialize<User>(message);
+        Console.WriteLine($"Message received: {user}");    
+    }
+    
+    private record User {
+        public string? Name { get; set; }
+        public string? Username { get; set; }
+        public string? Email { get; set; }
     }
 }

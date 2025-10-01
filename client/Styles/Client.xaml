@@ -1,0 +1,16 @@
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- Workaround for winui/windows -->
+	<x:String x:Key="DummyResource">test</x:String>
+
+    <!-- Define all the colors -->
+    <Color x:Key="PageBackgroundColor">#202020</Color>
+
+    <!-- Styles that apply to the standard pages -->
+	<Style TargetType="RelativePanel">
+		<Setter Property="Background" Value="{StaticResource PageBackgroundColor}" />
+	</Style>
+
+</ResourceDictionary>

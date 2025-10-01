@@ -16,10 +16,6 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.Json;
 using Argon.Client.Models;
 using Argon.Client.Presentation;
 using Argon.Client.Services;
@@ -43,31 +39,36 @@ internal partial class App : Application {
     }
 
     /// <summary>
-    /// Makes the main window and sets the start page.
+    /// Sets up the internal plumbing of the client.
     /// </summary>
     /// <param name="args"></param>
     protected async override void OnLaunched(LaunchActivatedEventArgs args) {
+        // it seems we have to use the IHostBuilder provided by Uno to make use of all the nice features
         IApplicationBuilder builder = this.CreateBuilder(args);
+        builder.UseToolkitNavigation().Configure(ConfigureHostBuilder);
 
-        // IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
-        // hostBuilder.UseLocalization()
-        //     .ConfigureServices(services => {
-        //         services.AddHostedService<NetworkService>();
-        //     });
-
-        builder.UseToolkitNavigation()
-            .Configure(hostBuilder => hostBuilder.UseLocalization()
-                // ModelMappings nodig om Models en Views automatisch te verbinden
-                .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
-            );
-
+        // there's a version of builder.Configure that takes a Window as argument, but we'll take this one
         Window mainWindow = builder.Window;
         mainWindow.AppWindow.Resize(new SizeInt32 { Width = 1920, Height = 1080 });
 
+        // and build the IHost
         IHost host = await builder.NavigateAsync<Shell>();
-        // await host.RunAsync();
+        // apparently, we don't need to host.RunAsync(), the builder took care of that?
+    }
 
-        RunTcp();   // TODO: naar host.RunAsync() verplaatsen
+    /// <summary>
+    /// Configures the IHostBuilder used by the client.
+    /// </summary>
+    /// <param name="builder"></param>
+    private void ConfigureHostBuilder(IHostBuilder builder) {
+        builder.UseLocalization()
+            // ModelMappings needed to automagically connect Models and Views
+            .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
+            // add services
+            .ConfigureServices(services => {
+                services.AddHostedService<NetworkService>();
+            }
+        );
     }
 
     /// <summary>
@@ -98,25 +99,5 @@ internal partial class App : Application {
                 ]
             )
         );
-    }
-
-    private static async void RunTcp() {
-        IPAddress ipAddress = new([127,0,0,1]);
-        var ipEndPoint = new IPEndPoint(ipAddress, 58008);
-
-        using TcpClient client = new();
-        await client.ConnectAsync(ipEndPoint);
-        await using NetworkStream stream = client.GetStream();
-
-        // ReadBytes() komt uit Uno extensions
-        var message = Encoding.UTF8.GetString(stream.ReadBytes());
-        User? user = JsonSerializer.Deserialize<User>(message);
-        Console.WriteLine($"Message received: {user}");
-    }
-    
-    private record User {
-        public string? Name { get; set; }
-        public string? Username { get; set; }
-        public string? Email { get; set; }
     }
 }

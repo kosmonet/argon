@@ -24,9 +24,5 @@ public sealed partial class Shell : UserControl {
     /// </summary>
     public Shell() {
         this.InitializeComponent();
-
-        // only way that works for setting the dark theme
-        IThemeService themeService = this.GetThemeService();
-        themeService.SetThemeAsync(AppTheme.Dark);
     }
 }

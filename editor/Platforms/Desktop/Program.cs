@@ -1,13 +1,10 @@
 using Uno.UI.Hosting;
 
-namespace editor;
+namespace Argon.Editor;
 
-internal class Program
-{
+internal class Program {
     [STAThread]
-    public static void Main(string[] args)
-    {
-
+    public static void Main(string[] args) {
         var host = UnoPlatformHostBuilder.Create()
             .App(() => new App())
             .UseX11()
