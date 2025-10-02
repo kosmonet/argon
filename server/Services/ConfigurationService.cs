@@ -37,6 +37,12 @@ internal class ConfigurationService {
         /// </summary>
 		[JsonInclude][JsonPropertyName("data")]
 		internal string DataFolder { get; init; } = Path.Combine(AppContext.BaseDirectory, "data");
+
+        /// <summary>
+        /// The list of modules to load.
+        /// </summary>
+        [JsonInclude][JsonPropertyName("modules")]
+		internal string[] Modules { get; init; } = [""];
     }
     
     private static readonly ILogger _logger = LogHelper.Logger;
@@ -68,8 +74,27 @@ internal class ConfigurationService {
         } else {
             // read the configuration if it does exist
     		using FileStream fileStream = File.OpenRead(filePath);
-	    	_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), "Application folder not available.");
+	    	_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), "Application data folder not available.");
             _logger.LogInformation("setting data folder: {folder}", _configuration.DataFolder);
+        }
+
+        // load all the modules in the order in which they appear in the config file
+        foreach (string module in _configuration.Modules) {
+            LoadModule(module);
+        }
+    }
+
+    /// <summary>
+    /// Load a module.
+    /// </summary>
+    /// <param name="module">The name of a module.</param>
+    /// <exception cref="FileLoadException">When the given module isn't found.</exception>
+    private void LoadModule(string module) {
+        string modulePath = Path.Combine(_configuration.DataFolder, module, $"{module}.xml");
+        if (File.Exists(modulePath)) {
+            _logger.LogInformation("loading module: {module}", module);
+        } else {
+            throw new FileLoadException($"Could not find module: '{module}'.");
         }
     }
 
@@ -77,7 +102,7 @@ internal class ConfigurationService {
     /// Save the configuration to the given path.
     /// </summary>
     /// <param name="filePath"></param>
-	internal void Save(string filePath) {
+	private void Save(string filePath) {
 		using FileStream fileStream = File.Create(filePath);
 		JsonSerializer.Serialize(fileStream, _configuration, _options);
 	}

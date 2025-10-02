@@ -18,6 +18,8 @@
 
 using Argon.Common;
 using Argon.Server.Services;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -31,6 +33,18 @@ internal class Server {
     private static readonly ILogger _logger = LogHelper.Logger;
 
     private readonly ConfigurationService _config = new();
+
+    internal Server() {
+        Console.WriteLine("testing script engine");
+        var codeToEval = @"
+            int test = 0;
+            var count = test + 15;
+            count++;
+            return count;"; 
+        var options = ScriptOptions.Default;
+        var result = CSharpScript.EvaluateAsync(codeToEval, options);
+        Console.WriteLine($"testing finished: {result.Result}");
+    }
 
     /// <summary>
     /// Main method of the Server.

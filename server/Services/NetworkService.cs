@@ -21,6 +21,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using Argon.Common;
+using Argon.Common.Assets;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -30,8 +31,8 @@ internal class NetworkService : BackgroundService {
     private static readonly ILogger _logger = LogHelper.Logger;
 
     protected override async Task ExecuteAsync(CancellationToken token) {
-        User user = new() { Name = "Jef", Username = "JJ", Email = "Jef@JJ.com"};
-        string message = JsonSerializer.Serialize(user);
+        CreatureAsset creature = new("cat", "cat", "cat.jpg");
+        string message = JsonSerializer.Serialize(creature);
         byte[] messageBytes = Encoding.UTF8.GetBytes(message);
 
         IPAddress ipAddress = new([127,0,0,1]);
@@ -47,11 +48,5 @@ internal class NetworkService : BackgroundService {
             await stream.WriteAsync(messageBytes, token);
             _logger.LogInformation("sent message: '{message}'", message);
         }
-    }
-
-    private record User {
-        public string? Name { get; set; }
-        public string? Username { get; set; }
-        public string? Email { get; set; }
     }
 }

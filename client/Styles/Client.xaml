@@ -3,12 +3,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<!-- Workaround for winui/windows -->
-	<x:String x:Key="DummyResource">test</x:String>
+	<!-- <x:String x:Key="DummyResource">test</x:String> -->
 
-    <!-- Define all the colors -->
+    <!-- Define the pretty pretty colors -->
     <Color x:Key="PageBackgroundColor">#202020</Color>
 
-    <!-- Styles that apply to the standard pages -->
+    <!-- Styles that apply to all pages -->
 	<Style TargetType="RelativePanel">
 		<Setter Property="Background" Value="{StaticResource PageBackgroundColor}" />
 	</Style>

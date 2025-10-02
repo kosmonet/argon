@@ -20,6 +20,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using Argon.Common.Assets;
 using Microsoft.Extensions.Hosting;
 
 namespace Argon.Client.Services;
@@ -36,13 +37,7 @@ public class NetworkService : BackgroundService {
 
         // ReadBytes() komt uit Uno extensions
         string message = Encoding.UTF8.GetString(stream.ReadBytes());
-        User? user = JsonSerializer.Deserialize<User>(message);
-        Console.WriteLine($"Message received: {user}");    
-    }
-    
-    private record User {
-        public string? Name { get; set; }
-        public string? Username { get; set; }
-        public string? Email { get; set; }
+        CreatureAsset? creature = JsonSerializer.Deserialize<CreatureAsset>(message);
+        Console.WriteLine($"Message received: {creature}");    
     }
 }
