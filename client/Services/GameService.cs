@@ -20,11 +20,8 @@ using Argon.Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Argon.Server.Services;
+namespace Argon.Client.Services;
 
-/// <summary>
-/// 
-/// </summary>
 public class GameService : BackgroundService {
     private static readonly ILogger _logger = LogHelper.Logger;
 
@@ -34,7 +31,7 @@ public class GameService : BackgroundService {
         // vaste of variabele framerate?
         while (!token.IsCancellationRequested) {
             // TODO: PeriodicTimer - slaat ticks over als de loop niet op tijd was
-            Console.Out.WriteLine("server gameloop tick");
+            Console.Out.WriteLine("client gameloop tick");
             await Task.Delay(TimeSpan.FromMilliseconds(1000), token);
         }
     }

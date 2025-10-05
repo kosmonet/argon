@@ -18,10 +18,8 @@
 
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Text.Json;
 using Argon.Common;
-using Argon.Common.Assets;
+using Argon.Server.Net;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -31,10 +29,6 @@ internal class NetworkService : BackgroundService {
     private static readonly ILogger _logger = LogHelper.Logger;
 
     protected override async Task ExecuteAsync(CancellationToken token) {
-        CreatureAsset creature = new("cat", "cat", "cat.jpg");
-        string message = JsonSerializer.Serialize(creature);
-        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-
         IPAddress ipAddress = new([127,0,0,1]);
         IPEndPoint ipEndPoint = new(ipAddress, 58008);
         TcpListener listener = new(ipEndPoint);
@@ -43,10 +37,8 @@ internal class NetworkService : BackgroundService {
         while (!token.IsCancellationRequested) {
             TcpClient client = await listener.AcceptTcpClientAsync(token);
             _logger.LogInformation("new client connected");
-
-            using NetworkStream stream = client.GetStream();
-            await stream.WriteAsync(messageBytes, token);
-            _logger.LogInformation("sent message: '{message}'", message);
+            ClientHandler handler = new(client);
+            handler.Run(token);
         }
     }
 }

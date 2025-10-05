@@ -17,6 +17,8 @@
  */
 
 using Argon.Common;
+using Argon.Common.Assets;
+using Argon.Common.Files;
 using Argon.Server.Services;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -32,35 +34,56 @@ namespace Argon.Server;
 internal class Server {
     private static readonly ILogger _logger = LogHelper.Logger;
 
-    private readonly ConfigurationService _config = new();
-
-    internal Server() {
-        Console.WriteLine("testing script engine");
-        var codeToEval = @"
-            int test = 0;
-            var count = test + 15;
-            count++;
-            return count;"; 
-        var options = ScriptOptions.Default;
-        var result = CSharpScript.EvaluateAsync(codeToEval, options);
-        Console.WriteLine($"testing finished: {result.Result}");
-    }
+    private readonly AppConfiguration _appConfig;
+    private readonly GameConfiguration _gameConfig;
+    private readonly ArgonFileSystem _files;
+    private readonly AssetManager _assets;
 
     /// <summary>
     /// Main method of the Server.
     /// </summary>
     /// <param name="args">The command line parameters.</param>
     public static async Task Main(string[] args) {
-        _logger.LogInformation("starting server");        
+        _logger.LogInformation("starting server");
         Server server = new();
 
         IHostBuilder builder = Host.CreateDefaultBuilder(args);
-        
+
         builder.ConfigureServices(services => {
             services.AddHostedService<NetworkService>();
+            services.AddHostedService<GameService>();
+
+            // services.AddSingleton<AppConfiguration>();
         });
 
         IHost host = builder.Build();
         await host.RunAsync();
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    internal Server() {
+        // load the config file
+        _appConfig = new AppConfiguration();
+
+        // initialize the file system
+        _files = new ArgonFileSystem(_appConfig.TempFolder);
+
+        // initialize the asset manager
+        _assets = new AssetManager();
+        _assets.RegisterLoader(new ModuleLoader(_files));
+
+        // add all modules in the configuration to the file system
+        _gameConfig = new GameConfiguration(_files, _assets, _appConfig);
+
+        // initialize the scripting system
+        InitializeScripting();
+    }
+
+    private static void InitializeScripting() {
+        var codeToEval = @"return 42;";
+        var result = CSharpScript.EvaluateAsync(codeToEval, ScriptOptions.Default);
+        Console.WriteLine($"testing script finished: {result.Result}");
+    }    
 }

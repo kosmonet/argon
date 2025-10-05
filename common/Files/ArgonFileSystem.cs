@@ -75,6 +75,7 @@ public class ArgonFileSystem {
 	public void AddModule(string path) {
 		if (Directory.Exists(path) || IsZipFile(path)) {
 			_modules.Push(path);
+			_logger.LogInformation("added module {module}", path);
 		}
 	}
 

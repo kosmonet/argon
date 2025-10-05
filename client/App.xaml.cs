@@ -67,6 +67,7 @@ internal partial class App : Application {
             // add services
             .ConfigureServices(services => {
                 services.AddHostedService<NetworkService>();
+                services.AddHostedService<GameService>();
             }
         );
     }

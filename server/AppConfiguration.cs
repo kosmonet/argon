@@ -21,12 +21,12 @@ using System.Text.Json.Serialization;
 using Argon.Common;
 using Microsoft.Extensions.Logging;
 
-namespace Argon.Server.Services;
+namespace Argon.Server;
 
 /// <summary>
 /// A service to handle all server configuration.
 /// </summary>
-internal class ConfigurationService {
+internal class AppConfiguration {
     /// <summary>
     /// Record to keep track of all server configuration.
     /// </summary>
@@ -43,17 +43,28 @@ internal class ConfigurationService {
         /// </summary>
         [JsonInclude][JsonPropertyName("modules")]
 		internal string[] Modules { get; init; } = [""];
+
+        /// <summary>
+        /// The location of the temp folder. The default value is the temp 
+        /// folder defined by the operating system.
+        /// </summary>
+        [JsonInclude][JsonPropertyName("temp")]
+        internal string TempFolder { get; init; } = Path.Combine(Path.GetTempPath(), "argon");
     }
     
     private static readonly ILogger _logger = LogHelper.Logger;
 
+    internal string TempFolder { get => _configuration.TempFolder; }
+    internal string DataFolder { get => _configuration.DataFolder; }
+    internal string[] Modules { get => _configuration.Modules; }
+
 	private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
     private readonly Configuration _configuration;
 
-    internal ConfigurationService() {
+    internal AppConfiguration() {
         // get the path to the config folder
-        string configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-		string folderPath = Path.Combine(configPath, "argon");
+        string folderPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "argon");
 
         // check if the config folder exists
         if(!Directory.Exists(folderPath)) {
@@ -69,33 +80,15 @@ internal class ConfigurationService {
         if(!File.Exists(filePath)) {
             // create the file with a default configuration if it doesn't exist
             _logger.LogInformation("creating config file: {file}", filePath);
-            _configuration = new Configuration();
+            _configuration = new();
             Save(filePath);
         } else {
             // read the configuration if it does exist
     		using FileStream fileStream = File.OpenRead(filePath);
-	    	_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), "Application data folder not available.");
-            _logger.LogInformation("setting data folder: {folder}", _configuration.DataFolder);
-        }
-
-        // load all the modules in the order in which they appear in the config file
-        foreach (string module in _configuration.Modules) {
-            LoadModule(module);
-        }
-    }
-
-    /// <summary>
-    /// Load a module.
-    /// </summary>
-    /// <param name="module">The name of a module.</param>
-    /// <exception cref="FileLoadException">When the given module isn't found.</exception>
-    private void LoadModule(string module) {
-        string modulePath = Path.Combine(_configuration.DataFolder, module, $"{module}.xml");
-        if (File.Exists(modulePath)) {
-            _logger.LogInformation("loading module: {module}", module);
-        } else {
-            throw new FileLoadException($"Could not find module: '{module}'.");
-        }
+	    	_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), 
+                "Application data folder not available.");
+            _logger.LogInformation("set data folder to {folder}", _configuration.DataFolder);
+        }    
     }
 
     /// <summary>
