@@ -18,7 +18,6 @@
 
 namespace Argon.Client.Models;
 
-internal partial record StartModel {
-    public string Title = "Please wait";
-    public string Subtitle = "Connecting to server";
+internal partial record GameModel {
+    
 }

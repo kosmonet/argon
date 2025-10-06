@@ -6,7 +6,7 @@
     mc:Ignorable="d">
 	  
     <RelativePanel>
-        <TextBlock FontSize="75" Text="Connecting to server..."
+        <TextBlock FontSize="75" Text="Starting client..."
 				RelativePanel.AlignHorizontalCenterWithPanel="True"
 				RelativePanel.AlignVerticalCenterWithPanel="True" />
     </RelativePanel>

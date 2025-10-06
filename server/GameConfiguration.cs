@@ -29,7 +29,7 @@ internal class GameConfiguration {
     internal string Title { get; } = "Argon";
     internal string Subtitle { get; } = "roguelike engine";
 
-    internal GameConfiguration(ArgonFileSystem files, AssetManager assets, AppConfiguration config) {
+    internal GameConfiguration(ArgonFileSystem files, AssetManager assets, ServerConfiguration config) {
         // load all the modules in the order in which they appear in the config file
         foreach (string module in config.Modules) {
             LoadModule(module, files, config.DataFolder);

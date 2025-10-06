@@ -34,7 +34,7 @@ namespace Argon.Server;
 internal class Server {
     private static readonly ILogger _logger = LogHelper.Logger;
 
-    private readonly AppConfiguration _appConfig;
+    private readonly ServerConfiguration _serverConfig;
     private readonly GameConfiguration _gameConfig;
     private readonly ArgonFileSystem _files;
     private readonly AssetManager _assets;
@@ -65,17 +65,17 @@ internal class Server {
     /// </summary>
     internal Server() {
         // load the config file
-        _appConfig = new AppConfiguration();
+        _serverConfig = new ServerConfiguration();
 
         // initialize the file system
-        _files = new ArgonFileSystem(_appConfig.TempFolder);
+        _files = new ArgonFileSystem(_serverConfig.TempFolder);
 
         // initialize the asset manager
         _assets = new AssetManager();
         _assets.RegisterLoader(new ModuleLoader(_files));
 
         // add all modules in the configuration to the file system
-        _gameConfig = new GameConfiguration(_files, _assets, _appConfig);
+        _gameConfig = new GameConfiguration(_files, _assets, _serverConfig);
 
         // initialize the scripting system
         InitializeScripting();

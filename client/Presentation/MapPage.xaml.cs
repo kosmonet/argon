@@ -1,4 +1,4 @@
-﻿/*
+/*
  *	Argon, a roguelike engine.
  *	Copyright (C) 2025 - Maarten Driesen
  * 
@@ -16,31 +16,28 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Argon.Common;
 using Microsoft.UI.Xaml.Input;
+using Windows.System;
 
 namespace Argon.Client.Presentation;
 
-public sealed partial class MainPage : Page {
-    public MainPage() {
+public sealed partial class MapPage : Page {
+    public MapPage() {
         InitializeComponent();
-        LostFocus += OnFocusLost;
     }
 
     /// <summary>
-    /// Handles key presses.
+    /// Handles the keyboard shortcuts on the load page.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
-        // Console.Out.WriteLine($"KeyDown: {args.Key}");
-    }
+        INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
 
-    /// <summary>
-    /// Requests focus when focus is lost.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
-    private void OnFocusLost(object sender, RoutedEventArgs args) {
-        Focus(FocusState.Programmatic);
+        switch (args.Key) {
+            case VirtualKey.Enter: navigator.NavigateViewAsync<GamePage>(sender); break;
+            case VirtualKey.Escape: navigator.GoBack(sender); break;
+        }
     }
 }

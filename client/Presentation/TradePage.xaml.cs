@@ -22,13 +22,13 @@ using Windows.System;
 
 namespace Argon.Client.Presentation;
 
-public sealed partial class NewPage : Page {
-    public NewPage() {
+public sealed partial class TradePage : Page {
+    public TradePage() {
         InitializeComponent();
     }
 
     /// <summary>
-    /// Handles the keyboard shortcuts on the new game page.
+    /// Handles the keyboard shortcuts on the load page.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>

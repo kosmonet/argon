@@ -1,5 +1,5 @@
 <Page KeyDown="OnKeyDown"
-	x:Class="Argon.Client.Presentation.NewPage"
+	x:Class="Argon.Client.Presentation.DialogPage"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:uen="using:Uno.Extensions.Navigation.UI">
@@ -21,7 +21,7 @@
 					RelativePanel.AlignLeftWithPanel="True">🙧</TextBlock>
 			<TextBlock FontSize="40" VerticalAlignment="Center" Margin="0 0 0 5"
 					RelativePanel.AlignVerticalCenterWithPanel="True"
-					RelativePanel.AlignHorizontalCenterWithPanel="True" x:Uid="NewTitle" />
+					RelativePanel.AlignHorizontalCenterWithPanel="True" x:Uid="DialogTitle" />
 			<TextBlock x:Name="TopRight" FontSize="75" Margin="0 -25"
 					RelativePanel.AlignRightWithPanel="True">🙥</TextBlock>
 		</RelativePanel>

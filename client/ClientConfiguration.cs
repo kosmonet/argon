@@ -21,12 +21,12 @@ using System.Text.Json.Serialization;
 using Argon.Common;
 using Microsoft.Extensions.Logging;
 
-namespace Argon.Server;
+namespace Argon.Client;
 
 /// <summary>
 /// A service to handle all server configuration.
 /// </summary>
-internal class AppConfiguration {
+internal class ClientConfiguration {
     /// <summary>
     /// Record to keep track of all server configuration.
     /// </summary>
@@ -35,14 +35,28 @@ internal class AppConfiguration {
         /// The location of the game data folder. The default value is the data 
         /// folder in the same location as the server executable.
         /// </summary>
-		[JsonInclude][JsonPropertyName("data")]
-		internal string DataFolder { get; init; } = Path.Combine(AppContext.BaseDirectory, "data");
+		[JsonInclude][JsonPropertyName("connection")]
+		internal string Connection { get; init; } = "tcp";
 
         /// <summary>
-        /// The list of modules to load.
+        /// The settings for connecting to a server.
         /// </summary>
-        [JsonInclude][JsonPropertyName("modules")]
-		internal string[] Modules { get; init; } = [""];
+        [JsonInclude][JsonPropertyName("settings")]
+		internal string[] Settings { get; init; } = ["127.0.0.1", "58008"];
+
+        /// <summary>
+        /// The location of the game data folder. The default value is the data 
+        /// folder in the same location as the server executable.
+        /// </summary>
+		[JsonInclude][JsonPropertyName("mode")]
+		internal string Mode { get; init; } = "host";
+
+        /// <summary>
+        /// The location of the game data folder. The default value is the data 
+        /// folder in the same location as the server executable.
+        /// </summary>
+		[JsonInclude][JsonPropertyName("data")]
+		internal string DataFolder { get; init; } = Path.Combine(AppContext.BaseDirectory, "data");
 
         /// <summary>
         /// The location of the temp folder. The default value is the temp 
@@ -56,12 +70,11 @@ internal class AppConfiguration {
 
     internal string TempFolder { get => _configuration.TempFolder; }
     internal string DataFolder { get => _configuration.DataFolder; }
-    internal string[] Modules { get => _configuration.Modules; }
 
 	private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
     private readonly Configuration _configuration;
 
-    internal AppConfiguration() {
+    internal ClientConfiguration() {
         // get the path to the config folder
         string folderPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "argon");
@@ -74,7 +87,7 @@ internal class AppConfiguration {
         }
 
         // get the path to the config file
-        string filePath = Path.Combine(folderPath, "server.config");
+        string filePath = Path.Combine(folderPath, "client.config");
 
         // check if the config file exists
         if(!File.Exists(filePath)) {

@@ -36,7 +36,7 @@ public sealed partial class LoadPage : Page {
         INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
 
         switch (args.Key) {
-            case VirtualKey.Enter: navigator.NavigateViewAsync<MainPage>(sender); break;
+            case VirtualKey.Enter: navigator.NavigateViewAsync<GamePage>(sender); break;
             case VirtualKey.Escape: navigator.GoBack(sender); break;
         }
     }

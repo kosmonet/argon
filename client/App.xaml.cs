@@ -29,6 +29,8 @@ namespace Argon.Client;
 /// 
 /// </summary>
 internal partial class App : Application {
+    private ClientConfiguration _config = new();
+
     /// <summary>
     /// Initializes the singleton application object. This is the first line of 
     /// authored code executed, and as such is the logical equivalent of main() 
@@ -82,21 +84,28 @@ internal partial class App : Application {
             // why is the Shell special?
             new ViewMap(ViewModel: typeof(ShellModel)),
             new ViewMap<StartPage, StartModel>(),
-            new ViewMap<MainPage, MainModel>(),
             new ViewMap<NewPage, NewModel>(),
             new ViewMap<LoadPage, LoadModel>(),
-            new ViewMap<OptionPage, OptionModel>()
+            new ViewMap<GamePage, GameModel>(),
+            new ViewMap<OptionPage, OptionModel>(),
+            new ViewMap<InventoryPage, InventoryModel>(),
+            new ViewMap<DialogPage, DialogModel>(),
+            new ViewMap<MapPage, MapModel>(),
+            new ViewMap<TradePage, TradeModel>()
         );
 
         routes.Register(
             new RouteMap("", View: views.FindByViewModel<ShellModel>(),
-                Nested:
-                [
+                Nested: [
                     new ("Start", View: views.FindByView<StartPage>(), IsDefault:true),
-                    new ("Main", View: views.FindByView<MainPage>()),
                     new ("New", View: views.FindByView<NewPage>()),
                     new ("Load", View: views.FindByView<LoadPage>()),
-                    new ("Options", View: views.FindByView<OptionPage>())
+                    new ("Options", View: views.FindByView<OptionPage>()),
+                    new ("Game", View: views.FindByView<GamePage>()), 
+                    new ("Dialog", View: views.FindByView<DialogPage>()),
+                    new ("Inventory", View: views.FindByView<InventoryPage>()),
+                    new ("Map", View: views.FindByView<MapPage>()),
+                    new ("trade", View: views.FindByView<TradePage>())
                 ]
             )
         );

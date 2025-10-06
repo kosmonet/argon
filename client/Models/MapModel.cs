@@ -18,6 +18,6 @@
 
 namespace Argon.Client.Models;
 
-internal partial record MainModel {
-    
+internal partial record MapModel {
+
 }

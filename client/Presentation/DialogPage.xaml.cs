@@ -22,13 +22,13 @@ using Windows.System;
 
 namespace Argon.Client.Presentation;
 
-public sealed partial class NewPage : Page {
-    public NewPage() {
+public sealed partial class DialogPage : Page {
+    public DialogPage() {
         InitializeComponent();
     }
 
     /// <summary>
-    /// Handles the keyboard shortcuts on the new game page.
+    /// Handles the keyboard shortcuts on the load page.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="args"></param>
@@ -36,8 +36,8 @@ public sealed partial class NewPage : Page {
         INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
 
         switch (args.Key) {
-            case VirtualKey.Enter: navigator.NavigateViewAsync<GamePage>(sender); break;
-            case VirtualKey.Escape: navigator.GoBack(sender); break;
+            // navigating back to a page only seems to work when the back stack is cleared
+            case VirtualKey.Escape: navigator.NavigateRouteAsync(this, "-/Game"); break;
         }
     }
 }

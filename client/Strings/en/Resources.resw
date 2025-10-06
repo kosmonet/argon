@@ -81,6 +81,22 @@
     <value>Options</value>
   </data>
 
+  <data name="DialogTitle.Text" xml:space="preserve">
+    <value>Dialog</value>
+  </data>
+
+  <data name="InventoryTitle.Text" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+
+  <data name="TradeTitle.Text" xml:space="preserve">
+    <value>Trade</value>
+  </data>
+
+  <data name="MapTitle.Text" xml:space="preserve">
+    <value>World map</value>
+  </data>
+
   <data name="QuitButton.Content" xml:space="preserve">
     <value>Quit</value>
   </data>
