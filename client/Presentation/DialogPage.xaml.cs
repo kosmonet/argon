@@ -33,10 +33,10 @@ public sealed partial class DialogPage : Page {
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
-        INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
+        INavigator navigator = Guard.NotNull(this.Navigator(), "INavigator not available.");
 
         switch (args.Key) {
-            // navigating back to a page only seems to work when the back stack is cleared
+            // navigation back to a page only seems to work when the back stack is cleared
             case VirtualKey.Escape: navigator.NavigateRouteAsync(this, "-/Game"); break;
         }
     }

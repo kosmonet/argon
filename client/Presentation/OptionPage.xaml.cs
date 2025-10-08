@@ -33,7 +33,7 @@ public sealed partial class OptionPage : Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
-        INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
+        INavigator navigator = Guard.NotNull(this.Navigator(), "INavigator not available.");
 
         switch (args.Key) {
             case VirtualKey.Enter: 

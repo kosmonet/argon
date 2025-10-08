@@ -47,17 +47,22 @@ internal class Server {
         _logger.LogInformation("starting server");
         Server server = new();
 
+        // set up and run the IHost
         IHostBuilder builder = Host.CreateDefaultBuilder(args);
-
-        builder.ConfigureServices(services => {
-            services.AddHostedService<NetworkService>();
-            services.AddHostedService<GameService>();
-
-            // services.AddSingleton<AppConfiguration>();
-        });
-
+        builder.ConfigureServices(RegisterServices);
         IHost host = builder.Build();
         await host.RunAsync();
+    }
+
+    /// <summary>
+    /// Adds services to the given service collection.
+    /// </summary>
+    /// <param name="services"></param>
+    private static void RegisterServices(IServiceCollection services) {
+        services.AddHostedService<NetworkService>();
+        services.AddHostedService<GameService>();
+
+        // services.AddSingleton<AppConfiguration>();
     }
 
     /// <summary>

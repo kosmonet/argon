@@ -36,7 +36,7 @@ public sealed partial class GamePage : Page {
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
-        INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
+        INavigator navigator = Guard.NotNull(this.Navigator(), "INavigator not available.");
 
         switch (args.Key) {
             case VirtualKey.I: navigator.NavigateRouteAsync(this, "Inventory"); break;

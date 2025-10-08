@@ -67,11 +67,16 @@ internal partial class App : Application {
             // ModelMappings needed to automagically connect Models and Views
             .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
             // add services
-            .ConfigureServices(services => {
-                services.AddHostedService<NetworkService>();
-                services.AddHostedService<GameService>();
-            }
-        );
+            .ConfigureServices(RegisterServices);
+    }
+
+    /// <summary>
+    /// Adds services to the given service collection.
+    /// </summary>
+    /// <param name="services"></param>
+    private void RegisterServices(IServiceCollection services) {
+        services.AddHostedService<NetworkService>();
+        services.AddHostedService<GameService>();
     }
 
     /// <summary>

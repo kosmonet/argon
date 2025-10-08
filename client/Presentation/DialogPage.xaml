@@ -38,7 +38,7 @@
 					RelativePanel.AlignHorizontalCenterWithPanel="True"
             		Orientation="Horizontal">
 				<Button FontSize="15"
-					uen:Navigation.Request="Game">Enter</Button>
+					uen:Navigation.Request="-/Game">Enter</Button>
 				<TextBlock x:Uid="StartLabel" VerticalAlignment="Center" FontSize="25" />
 				<TextBlock FontSize="25" Text=" " />
 				<Button FontSize="15"

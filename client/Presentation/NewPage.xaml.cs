@@ -33,7 +33,7 @@ public sealed partial class NewPage : Page {
     /// <param name="sender"></param>
     /// <param name="args"></param>
     private void OnKeyDown(object sender, KeyRoutedEventArgs args) {
-        INavigator navigator = Guard.NotNull<INavigator>(this.Navigator(), "INavigator not available.");
+        INavigator navigator = Guard.NotNull(this.Navigator(), "INavigator not available.");
 
         switch (args.Key) {
             case VirtualKey.Enter: navigator.NavigateViewAsync<GamePage>(sender); break;
