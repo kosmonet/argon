@@ -6,7 +6,9 @@
 
 	<Grid x:Name="Grid" Background="#303030">
 		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="440" />
 			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="440" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -16,7 +18,7 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 	
-		<RelativePanel Grid.Column="0" Grid.Row="0" Background="#202020">
+		<RelativePanel Grid.Column="0" Grid.Row="0" Background="#202020" Grid.ColumnSpan="3">
 			<TextBlock x:Name="TopLeft" FontSize="75" Margin="0 -25"
 					RelativePanel.AlignLeftWithPanel="True">🙧</TextBlock>
 			<TextBlock FontSize="40" VerticalAlignment="Center" Margin="0 0 0 5"
@@ -25,12 +27,79 @@
 			<TextBlock x:Name="TopRight" FontSize="75" Margin="0 -25"
 					RelativePanel.AlignRightWithPanel="True">🙥</TextBlock>
 		</RelativePanel>
-		<Rectangle Grid.Column="0" Grid.Row="1" 
-			Fill="Gray" Height="1"/>
+		<Rectangle Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
+			Fill="Gray" Height="1" />
 		
-		<Rectangle Grid.Column="0" Grid.Row="3" 
-			Fill="Gray" Height="1"/>
-		<RelativePanel Grid.Column="0" Grid.Row="4" Background="#202020">
+   		<Grid Grid.Column="0" Grid.Row="2" RowSpacing="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0" Grid.ColumnSpan="3" 
+					HorizontalAlignment="Center" FontSize="30">Player 1</TextBlock>
+			<Button Grid.Row="1" Grid.Column="0" FontSize="25"
+					HorizontalAlignment="Center">🎒</Button>
+			<Button Grid.Row="1" Grid.Column="1" FontSize="25"
+					HorizontalAlignment="Center">🗡</Button>
+			<Button Grid.Row="1" Grid.Column="2" FontSize="25"
+					HorizontalAlignment="Center">🛡️</Button>
+			<ListView Grid.Row="2" Grid.ColumnSpan="3">
+				<ListViewItem>Copper dagger</ListViewItem>
+				<ListViewItem>Iron warhammer</ListViewItem>
+				<ListViewItem>Longsword</ListViewItem>
+				<ListViewItem>Short sword</ListViewItem>
+				<ListViewItem>Another short sword</ListViewItem>
+			</ListView>
+		</Grid>
+		
+		<Rectangle Fill="#202020" Grid.Column="1" Grid.Row="2" />
+		<TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
+				HorizontalAlignment="Center" FontSize="230">🔨</TextBlock>
+
+   		<Grid Grid.Column="3" Grid.Row="2" RowSpacing="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Grid.Row="0" Grid.ColumnSpan="3" 
+					HorizontalAlignment="Center" FontSize="30">Player 2</TextBlock>
+			<Button Grid.Row="1" Grid.Column="0" FontSize="25"
+					HorizontalAlignment="Center">🎒</Button>
+			<Button Grid.Row="1" Grid.Column="1" FontSize="25"
+					HorizontalAlignment="Center">🗡</Button>
+			<Button Grid.Row="1" Grid.Column="2" FontSize="25"
+					HorizontalAlignment="Center">🛡️</Button>
+			<ListView Grid.Row="2" Grid.ColumnSpan="3">
+				<ListViewItem>Leather pants</ListViewItem>
+				<ListViewItem>Wool shirt</ListViewItem>
+				<ListViewItem>The wrong trousers</ListViewItem>
+				<ListViewItem>Little black dress</ListViewItem>
+				<ListViewItem>Shoes</ListViewItem>
+				<ListViewItem>Fluffy socks</ListViewItem>
+				<ListViewItem>Itchy socks</ListViewItem>
+				<ListViewItem>Warm socks</ListViewItem>
+				<ListViewItem>Fancy socks</ListViewItem>
+				<ListViewItem>Just socks</ListViewItem>
+			</ListView>
+		</Grid>
+
+		<Rectangle Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3"
+			Fill="Gray" Height="1" />
+		<RelativePanel Grid.Column="0" Grid.Row="4" Background="#202020" Grid.ColumnSpan="3">
 			<TextBlock x:Name="BottomLeft" FontSize="75" Margin="0 -20"
 					RelativePanel.AlignLeftWithPanel="True">🙦</TextBlock>
 			<StackPanel HorizontalAlignment="Center" Spacing="10" Margin="10"
@@ -38,12 +107,12 @@
 					RelativePanel.AlignHorizontalCenterWithPanel="True"
             		Orientation="Horizontal">
 				<Button FontSize="15"
-					uen:Navigation.Request="Game">Enter</Button>
-				<TextBlock x:Uid="StartLabel" VerticalAlignment="Center" FontSize="25" />
+					uen:Navigation.Request="-/Game">Enter</Button>
+				<TextBlock VerticalAlignment="Center" FontSize="25">Swap</TextBlock>
 				<TextBlock FontSize="25" Text=" " />
 				<Button FontSize="15"
 					uen:Navigation.Request="-">Esc</Button>
-				<TextBlock x:Uid="CancelLabel" VerticalAlignment="Center" FontSize="25" />
+				<TextBlock VerticalAlignment="Center" FontSize="25">Back</TextBlock>
 			</StackPanel>
 			<TextBlock x:Name="BottomRight" FontSize="75" Margin="0 -20"
 					RelativePanel.AlignRightWithPanel="True">🙤</TextBlock>

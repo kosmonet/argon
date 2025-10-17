@@ -19,6 +19,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Argon.Common;
+using Argon.Common.Net;
 using Microsoft.Extensions.Logging;
 
 namespace Argon.Server;
@@ -50,6 +51,25 @@ internal class ServerConfiguration {
         /// </summary>
         [JsonInclude][JsonPropertyName("temp")]
         internal string TempFolder { get; init; } = Path.Combine(Path.GetTempPath(), "argon");
+
+        /// <summary>
+        /// The IP address of the server.
+        /// </summary>
+        [JsonInclude][JsonPropertyName("address")]
+        internal string IpAddress {get; init; } = "127.0.0.1";
+
+        /// <summary>
+        /// The IP port to listen to for clients.
+        /// TODO: make this an enum
+        /// </summary>
+        [JsonInclude][JsonPropertyName("port")]
+        internal string IpPort {get; init; } = "58008";
+
+        /// <summary>
+        /// The game mode: host or solo.
+        /// </summary>
+        [JsonInclude][JsonPropertyName("mode")]
+        internal string Mode {get; init; } = "host";
     }
     
     private static readonly ILogger _logger = LogHelper.Logger;
@@ -62,6 +82,9 @@ internal class ServerConfiguration {
     private readonly Configuration _configuration;
 
     internal ServerConfiguration() {
+        // to convert a json string to an IP address
+        _options.Converters.Add(new IPAddressConverter());
+
         // get the path to the config folder
         string folderPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "argon");
@@ -88,7 +111,7 @@ internal class ServerConfiguration {
 	    	_configuration = Guard.NotNull(JsonSerializer.Deserialize<Configuration>(fileStream), 
                 "Application data folder not available.");
             _logger.LogInformation("set data folder to {folder}", _configuration.DataFolder);
-        }    
+        }
     }
 
     /// <summary>

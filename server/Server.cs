@@ -45,7 +45,7 @@ internal class Server {
     /// <param name="args">The command line parameters.</param>
     public static async Task Main(string[] args) {
         _logger.LogInformation("starting server");
-        Server server = new();
+        // Server server = new();
 
         // set up and run the IHost
         IHostBuilder builder = Host.CreateDefaultBuilder(args);
@@ -62,13 +62,14 @@ internal class Server {
         services.AddHostedService<NetworkService>();
         services.AddHostedService<GameService>();
 
+        services.AddSingleton<Server>();
         // services.AddSingleton<AppConfiguration>();
     }
 
     /// <summary>
     /// 
     /// </summary>
-    internal Server() {
+    public Server() {
         // load the config file
         _serverConfig = new ServerConfiguration();
 

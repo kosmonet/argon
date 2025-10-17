@@ -53,9 +53,8 @@ internal partial class App : Application {
         Window mainWindow = builder.Window;
         mainWindow.AppWindow.Resize(new SizeInt32 { Width = 1920, Height = 1080 });
 
-        // and build the IHost
-        IHost host = await builder.NavigateAsync<Shell>();
         // apparently, we don't need to host.RunAsync(), the builder took care of that?
+        IHost host = await builder.NavigateAsync<Shell>();
     }
 
     /// <summary>

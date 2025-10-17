@@ -27,7 +27,6 @@ namespace Argon.Server.Net;
 
 public class ClientHandler {
     private ILogger _logger = LogHelper.Logger;
-
     private TcpClient _client;
 
     internal ClientHandler(TcpClient client) {
