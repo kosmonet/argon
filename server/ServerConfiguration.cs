@@ -16,6 +16,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Argon.Common;
@@ -56,7 +57,8 @@ internal class ServerConfiguration {
         /// The IP address of the server.
         /// </summary>
         [JsonInclude][JsonPropertyName("address")]
-        internal string IpAddress {get; init; } = "127.0.0.1";
+        [JsonConverter(typeof(IPAddressConverter))]
+        internal IPAddress IpAddress {get; init; } = IPAddress.Parse("127.0.0.1");
 
         /// <summary>
         /// The IP port to listen to for clients.
@@ -69,7 +71,8 @@ internal class ServerConfiguration {
         /// The game mode: host or solo.
         /// </summary>
         [JsonInclude][JsonPropertyName("mode")]
-        internal string Mode {get; init; } = "host";
+        [JsonConverter(typeof(GameModeConverter))]
+        internal GameMode Mode {get; init; } = GameMode.Host;
     }
     
     private static readonly ILogger _logger = LogHelper.Logger;
@@ -82,9 +85,6 @@ internal class ServerConfiguration {
     private readonly Configuration _configuration;
 
     internal ServerConfiguration() {
-        // to convert a json string to an IP address
-        _options.Converters.Add(new IPAddressConverter());
-
         // get the path to the config folder
         string folderPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "argon");

@@ -25,8 +25,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Argon.Server.Services;
 
+/// <summary>
+/// TODO: 
+/// - connect with one or two clients
+/// - send client config message
+/// </summary>
 internal class NetworkService : BackgroundService {
     private static readonly ILogger _logger = LogHelper.Logger;
+
+    public NetworkService(GameConfiguration config) {
+        
+    }
 
     protected override async Task ExecuteAsync(CancellationToken token) {
         IPAddress ipAddress = new([127,0,0,1]);

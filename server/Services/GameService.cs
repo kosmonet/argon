@@ -28,10 +28,6 @@ namespace Argon.Server.Services;
 internal class GameService : BackgroundService {
     private static readonly ILogger _logger = LogHelper.Logger;
 
-    public GameService(Server server) {
-        
-    }
-
     protected override async Task ExecuteAsync(CancellationToken token) {
         _logger.LogInformation("GameService started");
 

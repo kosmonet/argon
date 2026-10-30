@@ -35,7 +35,7 @@
     <RootNamespace>Argon.Client</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Uno.Extensions.Reactive" Version="6.2.3" />
+    <PackageReference Include="Uno.Extensions.Reactive" Version="7.3.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../common/common.csproj" />

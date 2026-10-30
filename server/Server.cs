@@ -34,18 +34,15 @@ namespace Argon.Server;
 internal class Server {
     private static readonly ILogger _logger = LogHelper.Logger;
 
-    private readonly ServerConfiguration _serverConfig;
-    private readonly GameConfiguration _gameConfig;
-    private readonly ArgonFileSystem _files;
-    private readonly AssetManager _assets;
-
     /// <summary>
     /// Main method of the Server.
     /// </summary>
     /// <param name="args">The command line parameters.</param>
     public static async Task Main(string[] args) {
         _logger.LogInformation("starting server");
-        // Server server = new();
+
+        // initialize the scripting system
+        InitializeScripting();
 
         // set up and run the IHost
         IHostBuilder builder = Host.CreateDefaultBuilder(args);
@@ -59,32 +56,23 @@ internal class Server {
     /// </summary>
     /// <param name="services"></param>
     private static void RegisterServices(IServiceCollection services) {
-        services.AddHostedService<NetworkService>();
-        services.AddHostedService<GameService>();
-
-        services.AddSingleton<Server>();
-        // services.AddSingleton<AppConfiguration>();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public Server() {
         // load the config file
-        _serverConfig = new ServerConfiguration();
+        ServerConfiguration config = new();
 
         // initialize the file system
-        _files = new ArgonFileSystem(_serverConfig.TempFolder);
+        ArgonFileSystem files = new(config.TempFolder);
 
         // initialize the asset manager
-        _assets = new AssetManager();
-        _assets.RegisterLoader(new ModuleLoader(_files));
+        AssetManager assets = new();
+        assets.RegisterLoader(new ModuleLoader(files));
 
-        // add all modules in the configuration to the file system
-        _gameConfig = new GameConfiguration(_files, _assets, _serverConfig);
+        services.AddSingleton(files);
+        services.AddSingleton(assets);
+        services.AddSingleton(config);
+        services.AddSingleton<GameConfiguration>();
 
-        // initialize the scripting system
-        InitializeScripting();
+        services.AddHostedService<NetworkService>();
+        services.AddHostedService<GameService>();
     }
 
     private static void InitializeScripting() {

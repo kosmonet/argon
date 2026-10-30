@@ -23,6 +23,6 @@
 
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Argon.Client</RootNamespace>
+    <RootNamespace>Argon.Editor</RootNamespace>
   </PropertyGroup>
 </Project>

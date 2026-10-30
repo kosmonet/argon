@@ -10,6 +10,7 @@
 	"settings": {
 		"dotnet.preferCSharpExtension": false,
 		"csharp.format.enable": false,
-		"omnisharp.useEditorFormattingSettings": false
+		"omnisharp.useEditorFormattingSettings": false,
+		"unoplatform.ignoreCheck": false
 	}
 }

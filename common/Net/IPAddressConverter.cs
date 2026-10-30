@@ -27,10 +27,10 @@ public class IPAddressConverter : JsonConverter<IPAddress> {
     /// Parses a string into an address. If the string is empty, 127.0.0.1 is returned.
     /// </summary>
     /// <param name="reader"></param>
-    /// <param name="typeToConvert"></param>
+    /// <param name="type"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    public override IPAddress Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+    public override IPAddress Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options) {
         return IPAddress.Parse(reader.GetString() ?? "127.0.0.1");
     }
 
