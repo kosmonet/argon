@@ -1,6 +1,7 @@
 {
     "dotnet.preferCSharpExtension": false,
-    "unoplatform.ignoreCheck": true,
+    "unoplatform.ignoreCheck": false,
     "csharp.format.enable": false,
-    "omnisharp.useEditorFormattingSettings": false
+    "omnisharp.useEditorFormattingSettings": false,
+    "dotnet.defaultSolution": "argon.slnx"
 }
